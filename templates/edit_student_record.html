@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student Record</title>
+</head>
+<body>
+<h1>Edit Student Record</h1>
+
+<form action = '{{ url_for('edit_student_record',student_name = edit_student_details.get_StudentName()) }}' method = "POST">
+    <p>Name:</p>
+    <input type = "text" size = '30' name = "StudentName" value = "{{edit_student_details.get_StudentName() }}" readonly>
+
+    <p>Register No.:</p>
+    <input type = "text" size = '30' name = "StudentRegNo" value = "{{edit_student_details.get_StudentRegNo()}}" >
+
+    <p>Class:</p>
+    <input type = "text" size = '30' name = "ClassName" value = "{{edit_student_details.get_ClassName() }}" >
+
+    <p>Gender:</p>
+    <input type = 'text' size = '30' name = 'StudentGender' value = '{{ edit_student_details.get_StudentGender() }}'>
+
+    <p></p>
+    <table style = 'width: 50%; text-align: left'>
+        <tr>
+            <td>Subject:</td>
+            <td>Grade:</td>
+        </tr>
+        {% for i in range %}
+        <tr>
+            <td><input type = "text" size = '30' name = '{{"SubjectName{}".format(i)}}' value = "{{edit_student_details.get_StudentSubjectCombi().split(' ')[i]}}" > </td>
+            <td><input type = "text" size = '30' name = '{{"SubjectGrade{}".format(i)}}' value = "{{edit_student_details.get_AllSubjectGrades().split(' ')[i]}}" > </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p></p>
+    <input type = 'submit' value = 'Update'>
+
+</form>
+
+<p></p>
+<a href = '{{ url_for('display_all_student_records') }}'>Cancel</a>
+
+</body>
+</html>

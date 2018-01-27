@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Student Record</title>
+</head>
+<body>
+<h1>Delete Student Record</h1>
+
+<form action = '{{ url_for('delete_student_record', student_name = delete_student_details.get_StudentName()) }}' method = 'POST'>
+
+    <p>Name:</p>
+    <input type = "text" size = '30' name = "StudentName" value = "{{delete_student_details.get_StudentName() }}" readonly>
+
+    <p>Register No.:</p>
+    <input type = "text" size = '30' name = "StudentRegNo" value = "{{delete_student_details.get_StudentRegNo()}}" readonly>
+
+    <p>Class:</p>
+    <input type = "text" size = '30' name = "ClassName" value = "{{delete_student_details.get_ClassName() }}" readonly>
+
+    <p>Subject Combination:</p>
+    <input type = "text" size = '30' name = "StudentSubjectCombi" value = "{{delete_student_details.get_StudentSubjectCombi() }}" readonly>
+
+    <p>Grades (in order):</p>
+    <input type = "text" size = '30' name = "ClassName" value = "{{delete_student_details.get_AllSubjectGrades() }}" readonly>
+
+    <p></p>
+    <input type = 'submit' value = 'Delete'>
+
+</form>
+
+<p></p>
+<a href = '{{url_for('display_all_student_records')}}'>Cancel</a>
+
+</body>
+</html>

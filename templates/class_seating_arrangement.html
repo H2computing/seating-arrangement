@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seating Arrangement Set-Up</title>
+</head>
+
+<body>
+<h1>Seating Arrangement Set-Up</h1>
+
+<form action = '{{ url_for('class_seating_arrangement')}}' method = "POST">
+    <p>Class:</p>
+    <select name = "ClassName" value = "{{valid_classes[0]}}">
+        {% for class in valid_classes%}
+        <option>{{class}}</option>
+        {% endfor %}
+    </select>
+
+    <p></p>
+    <input type="submit" formaction="set_student_details" value="Next">
+
+
+</form>
+
+<p></p>
+<a href = '{{ url_for('set_seating_arrangement') }}'>Back</a>
+
+
+</body>
+</html>

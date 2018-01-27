@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generated Seating Arrangement</title>
+    <style>
+        th, td{border: 1px solid black;}
+    </style>
+</head>
+<body>
+<h1>Generated Seating Arrangement</h1>
+
+<table style = 'width: 80%;table-layout: fixed' align="center" border = '1'>
+    <tr>
+        <th colspan = "{{ColumnNo*3 - 1}}">White Board</th>
+    </tr>
+</table>
+<table style = 'text-align: center' align="center" border = '1' cellpadding="20">
+    {% for row in RowNoRange %}
+    <tr>
+        {% for column in ColumnNoRange %}
+            {% if (row*ColumnNo*2 + column*2 + 1) <= ClassSize %}
+            <td rowspan="2" style = "width: 10px">{{ SeatingArrangement_lst[row][column][0] }}</td>
+            {% else %}
+            <td rowspan="2" style = "width: 10px">&nbsp;</td>
+            {% endif %}
+
+            {% if (row*ColumnNo*2 + column*2 + 2) <= ClassSize %}
+            <td rowspan="2" style = "width: 10px">{{ SeatingArrangement_lst[row][column][1] }}</td>
+            {% else %}
+            <td rowspan="2" style = "width: 10px">&nbsp;</td>
+            {% endif %}
+
+            {% if column != ColumnNo -1 %}
+            <td rowspan="2" style = "width: 5px" bgcolor="#888888">&nbsp;</td>
+            {% endif %}
+
+        {% endfor %}
+    </tr>
+    <tr>&nbsp;</tr>
+    {% endfor %}
+
+</table>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<form action = 'generate_seating_arrangement_again'>
+<input type= "submit" value = "Generate Another Seating Arrangement"/>
+</form>
+
+<p>Do note that by going back to display menu or settings menu, all data you have inputted for your seating arrangement will be erased.</p>
+<p></p>
+<a href = '{{ url_for('set_seating_arrangement') }}'>Back To Settings Menu</a>
+
+<p></p>
+<a href = '{{ url_for('display_all_student_records') }}'>Back to Display Menu</a>
+
+</body>
+</html>

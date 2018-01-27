@@ -1,0 +1,16 @@
+ClassName;TotalStudents;StudentRegNo;StudentName;StudentGender;StudentSubjectCombi;SubjectName;Description;SubjectGrade
+5A;30;13;Timothy;M;PH EC MA(H1) HI GP;GP;H1 General Paper;B
+5A;30;13;Timothy;M;PH EC MA(H1) HI GP;PH;H2 Physics;D
+5A;30;13;Timothy;M;PH EC MA(H1) HI GP;EC;H2 Economics;B
+5A;30;13;Timothy;M;PH EC MA(H1) HI GP;MA(H1);H1 Mathematicso;A
+5A;30;13;Timothy;M;PH EC MA(H1) HI GP;HI;H2 History;E
+5M;22;7;Kah Leong;M;PH CP MA HI GP;CP;H2 Computing;A
+5M;22;7;Kah Leong;M;PH CP MA HI GP;PH;H2 Physics;A
+5M;22;7;Kah Leong;M;PH CP MA HI GP;MA;H2 Math;B
+5M;22;7;Kah Leong;M;PH CP MA HI GP;HI;H2 History;C
+5M;22;7;Kah Leong;M;PH CP MA HI GP;GP;H1 General Paper;B
+5M;22;1;Ting Fang;F;PH EC MA HI GP;GP;H1 General Paper;B
+5M;22;1;Ting Fang;F;PH EC MA HI GP;PH;H2 Physics;B
+5M;22;1;Ting Fang;F;PH EC MA HI GP;MA;H2 Mathematics;C
+5M;22;1;Ting Fang;F;PH EC MA HI GP;EC;H2 Economics;E
+5M;22;1;Ting Fang;F;PH EC MA HI GP;HI;H2 History;B

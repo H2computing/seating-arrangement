@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seating Arrangement Set-Up</title>
+</head>
+<body>
+<h1>Seating Arrangement Set-Up</h1>
+
+<form action = '{{ url_for('set_student_details')}}' method = "POST">
+
+    <p>No. of Rows:</p>
+    <input type = "text" size = '10' name = 'RowNo' value = "" >
+
+    <p>No. of Columns:</p>
+    <input type = "text" size = '10' name = 'ColumnNo' value = "" >
+
+    <p>Tick next to student's name if he/she needs to seat in front:</p>
+    {% for i in student_range %}
+    <input type = 'checkbox' name = '{{"SeatInFront{}".format(i)}}' value = {{Students[i]}}>{{Students[i]}}<br>
+    {% endfor %}
+
+    <p>Please pair the students who cannot seat next to one another:</p>
+    <p></p>
+    <table style = 'width: 50%; text-align: left'>
+        <tr>
+            <td>Student 1:</td>
+            <td>Student 2:</td>
+        </tr>
+        {% for i in range %}
+        <tr>
+            <td>
+                <select name = "{{'StudentName1{}'.format(i)}}">
+                    <option></option>
+                    {% for student in Students%}
+                    <option>{{ student }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                <select name = "{{'StudentName2{}'.format(i)}}">
+                    <option></option>
+                    {% for student in Students%}
+                    <option>{{ student }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>Seat By Grades?:</p>
+    <input type = 'checkbox' name = 'SeatByGrades' value = 'Yes'>
+    <p>*Pupils who are weak in certain subjects will seat next to those who are strong in that same subject.</p>
+    <p>*However this may not be 100% fulfilled as student's request to seat in front is prioritised.</p>
+
+    <p></p>
+    <button type= "submit" formaction="generate_seating_arrangement">Next</button>
+</form>
+
+<p></p>
+
+<p>Do note that by going back to display menu or settings menu, all data you have inputted for your seating arrangement will be erased.</p>
+<p></p>
+<a href = '{{ url_for('set_seating_arrangement') }}'>Back To Settings Menu</a>
+
+<p></p>
+<a href = '{{ url_for('display_all_student_records') }}'>Back to Display Menu</a>
+
+</body>
+</html>

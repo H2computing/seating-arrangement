@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Student Record</title>
+</head>
+<body>
+<h1>Create Student Record</h1>
+
+<form action = '{{ url_for('create_student_record')}}' method = "POST">
+    <p>Name:</p>
+    <input type = "text" size = '30' name = 'StudentName' value = "" >
+
+    <p>Register No.:</p>
+    <input type = "text" size = '30' name = 'StudentRegNo' value = "" >
+
+    <p>Class:</p>
+    <input type = "text" size = '30' name = 'ClassName' value = "" >
+
+    <p>Gender:</p>
+    <input type = "text" size = '30' name = 'StudentGender' value = "" >
+
+    <p>Please write subject combination as 'PH CM MA EC GP' with space in between each subject</p>
+    <p>State whether it is a H1/H2/H3 Subject, MA(H1) = H1 Maths, MA = H2 Maths and MA(H3) = H3 Maths</p>
+
+    <p>Subject Combination:</p>
+    <input type = 'text' size = '30' name = 'StudentSubjectCombi' value = "">
+
+    <p>For grades for each subjects write as 'A B C D E' with space between each grade</p>
+    <p>Please fill in the overall grades thus far</p>
+
+    <p>Grades (in order):</p>
+    <input type = 'text' size = '30' name = 'AllSubjectGrades' value = ''>
+
+    <p></p>
+    <input type = 'submit' value = 'Create'>
+
+</form>
+
+<p></p>
+<a href = '{{ url_for('display_all_student_records') }}'>Cancel</a>
+
+</body>
+</html>

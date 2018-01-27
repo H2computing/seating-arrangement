@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seating Arrangement Set-Up</title>
+</head>
+<body>
+<h1>Seating Arrangement Set-Up</h1>
+
+<p>Please choose the type of class your seating arrangement is for:</p>
+
+<p>If it is for a full class:</p>
+<form action = 'class_seating_arrangement'>
+<input type="submit" value="Click Here" />
+</form>
+
+<p>If it is for other classes:</p>
+<p>i.e. History classes which only part of the class takes</p>
+<form action = 'special_class_seating_arrangement'>
+<input type= "submit" value = "Click Here"/>
+</form>
+
+<p></p>
+<a href = '{{ url_for('display_all_student_records') }}'>Cancel</a>
+
+</body>
+</html>
