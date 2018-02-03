@@ -21,3 +21,9 @@ SeatingArrangement;StudentName;TEXT;NOT NULL;Yes;StudentRecords(SubjectName)
 ;SeatByGrades;TEXT;NOT NULL DEFAULT '';;
 ;RowNo;INTEGER;NOT NULL DEFAULT 0;;
 ;ColumnNo;INTEGER;NOT NULL DEFAULT 0;;
+User;UserName;TEXT;NOT NULL;Yes;;
+;Password;TEXT;NOT NULL;;
+SavedSeatArr;UserName;TEXT;NOT NULL;Yes;User(UserName);
+;SeatArrName;TEXT;NOT NULL;Yes;
+;SeatArrSeq;TEXT;NOT NULL;;
+CurrentUser;UserName;TEXT;NOT NULL;Yes;User(UserName)

@@ -423,3 +423,200 @@ class SeatingArrangement(object):
         return result
 
 
+class User(object):
+    """SQLite OOP class User"""
+
+    # initializer for classUser
+    def __init__(self, UserName, Password):
+        self._UserName = UserName
+        self._Password = Password
+
+    # Mutator Functions
+    def set_UserName(self, new_UserName):
+        self._UserName = new_UserName
+
+    def set_Password(self, new_Password):
+        self._Password = new_Password
+
+    # Accessor Functions
+    def get_UserName(self):
+        return self._UserName
+
+    def get_Password(self):
+        return self._Password
+
+    # String Representation of Class User
+    def __str__(self):
+        result = ""
+
+        return result
+
+    # SQLite: Create Table of Class User
+    @staticmethod
+    def create_table():
+        result = ""
+        result += "CREATE TABLE User(\n"
+        result += "UserName TEXT NOT NULL,\n"
+        result += "Password TEXT NOT NULL,\n"
+        result += "PRIMARY KEY(UserName)\n"
+        result += ")\n"
+        return result
+
+    # SQLite: Create new record
+    def create_new_record(self):
+        result = ""
+        result += "INSERT INTO User\n"
+        result += "(UserName, Password)\n"
+        result += "VALUES\n"
+        result += "('{self._UserName}', '{self._Password}')\n".format(self=self)
+        return result
+
+    # SQLite: Update record based on primary key
+    def update_record(self):
+        result = ""
+        result += "UPDATE User SET\n"
+        result += "UserName = '{self._UserName}', Password = '{self._Password}'\n".format(self=self)
+        result += "WHERE\n"
+        result += "UserName = '{self._UserName}'\n".format(self=self)
+        return result
+
+    # SQLite: Delete record based on primary key
+    def delete_record(self):
+        result = ""
+        result += "DELETE FROM User WHERE\n"
+        result += "UserName = '{self._UserName}'\n".format(self=self)
+        return result
+
+
+class SavedSeatArr(object):
+    """SQLite OOP class SavedSeatArr"""
+
+    # initializer for classSavedSeatArr
+    def __init__(self, UserName, SeatArrName, SeatArrSeq):
+        self._UserName = UserName
+        self._SeatArrName = SeatArrName
+        self._SeatArrSeq = SeatArrSeq
+
+    # Mutator Functions
+    def set_UserName(self, new_UserName):
+        self._UserName = new_UserName
+
+    def set_SeatArrName(self, new_SeatArrName):
+        self._SeatArrName = new_SeatArrName
+
+    def set_SeatArrSeq(self, new_SeatArrSeq):
+        self._SeatArrSeq = new_SeatArrSeq
+
+    # Accessor Functions
+    def get_UserName(self):
+        return self._UserName
+
+    def get_SeatArrName(self):
+        return self._SeatArrName
+
+    def get_SeatArrSeq(self):
+        return self._SeatArrSeq
+
+    # String Representation of Class SavedSeatArr
+    def __str__(self):
+        result = ""
+
+        return result
+
+    # SQLite: Create Table of Class SavedSeatArr
+    @staticmethod
+    def create_table():
+        result = ""
+        result += "CREATE TABLE SavedSeatArr(\n"
+        result += "UserName TEXT NOT NULL,\n"
+        result += "SeatArrName TEXT NOT NULL,\n"
+        result += "SeatArrSeq TEXT NOT NULL,\n"
+        result += "PRIMARY KEY(UserName, SeatArrName),\n"
+        result += "FOREIGN KEY (UserName) REFERENCES User(UserName)\n"
+        result += ")\n"
+        return result
+
+    # SQLite: Create new record
+    def create_new_record(self):
+        result = ""
+        result += "INSERT INTO SavedSeatArr\n"
+        result += "(UserName, SeatArrName, SeatArrSeq)\n"
+        result += "VALUES\n"
+        result += "('{self._UserName}', '{self._SeatArrName}', '{self._SeatArrSeq}')\n".format(self=self)
+        return result
+
+    # SQLite: Update record based on primary key
+    def update_record(self):
+        result = ""
+        result += "UPDATE SavedSeatArr SET\n"
+        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}', SeatArrSeq = '{self._SeatArrSeq}'\n".format(self=self)
+        result += "WHERE\n"
+        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}'\n".format(self=self)
+        return result
+
+    # SQLite: Delete record based on primary key
+    def delete_record(self):
+        result = ""
+        result += "DELETE FROM SavedSeatArr WHERE\n"
+        result += "UserName = '{self._UserName}' and SeatArrName = '{self._SeatArrName}'\n".format(self=self)
+        return result
+
+
+class CurrentUser(object):
+    """SQLite OOP class CurrentUser"""
+
+    # initializer for classCurrentUser
+    def __init__(self, UserName):
+        self._UserName = UserName
+
+    # Mutator Functions
+    def set_UserName(self, new_UserName):
+        self._UserName = new_UserName
+
+    # Accessor Functions
+    def get_UserName(self):
+        return self._UserName
+
+    # String Representation of Class CurrentUser
+    def __str__(self):
+        result = ""
+
+        return result
+
+    # SQLite: Create Table of Class CurrentUser
+    @staticmethod
+    def create_table():
+        result = ""
+        result += "CREATE TABLE CurrentUser(\n"
+        result += "UserName TEXT NOT NULL,\n"
+        result += "PRIMARY KEY(UserName),\n"
+        result += "FOREIGN KEY (UserName) REFERENCES User(UserName)\n"
+        result += ")\n"
+        return result
+
+    # SQLite: Create new record
+    def create_new_record(self):
+        result = ""
+        result += "INSERT INTO CurrentUser\n"
+        result += "(UserName)\n"
+        result += "VALUES\n"
+        result += "('{self._UserName}')\n".format(self=self)
+        return result
+
+    # SQLite: Update record based on primary key
+    def update_record(self):
+        result = ""
+        result += "UPDATE CurrentUser SET\n"
+        result += "UserName = '{self._UserName}'\n".format(self=self)
+        result += "WHERE\n"
+        result += "UserName = '{self._UserName}'\n".format(self=self)
+        return result
+
+    # SQLite: Delete record based on primary key
+    def delete_record(self):
+        result = ""
+        result += "DELETE FROM CurrentUser WHERE\n"
+        result += "UserName = '{self._UserName}'\n".format(self=self)
+        return result
+
+

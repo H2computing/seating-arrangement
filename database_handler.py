@@ -1,8 +1,8 @@
-from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement
+from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr
 import sqlite3
 import sys
 
-debug = False
+debug = True
 
 #Helper function, to execute 1 line of sql
 def execute_sql(sql):
@@ -35,6 +35,9 @@ def create_table():
     execute_sql(StudentRecords.create_table())
     execute_sql(Subject.create_table())
     execute_sql(SeatingArrangement.create_table())
+    execute_sql(User.create_table())
+    execute_sql(CurrentUser.create_table())
+    execute_sql(SavedSeatArr.create_table())
 
 #create_table()
 
@@ -59,12 +62,19 @@ def read_file(file_name):
             sr1 = StudentRecords(StudentName, SubjectGrade, SubjectName)
             sb1 = Subject(SubjectName, Description)
             sa1 = SeatingArrangement(StudentName, CannotSeatNextTo= '', SeatInFront= False,WeakSubjects='',StrongSubjects='', ClassLst = '', SeatByGrades= '' , RowNo = 0, ColumnNo=0)
+            user1 = User(UserName = 'Ting Fang', Password='')
+            currentuser1 = CurrentUser(UserName='Ting Fang')
+            #TODO Username does not have to be class specific as CP will add in student info by themselves, most important is to do a back-end  validation to check if username is taken alr or not
+            #TODO set user to an example user first, by right upon creating an account on login, user info will be created and added into User table
+            #TODO set current user to nth by default until someone logins, then current user will become that username, must always reset current user
             execute_sql(c1.create_new_record())
             execute_sql(st1.create_new_record())
             execute_sql(sr1.create_new_record())
             execute_sql(sb1.create_new_record())
             execute_sql(sa1.create_new_record())
+            execute_sql(user1.create_new_record())
+            execute_sql(currentuser1.create_new_record())
             line = f.readline()
-    #f.close()
+    f.close()
 
 #read_file('result_data.csv')

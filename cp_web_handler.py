@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect
-from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement
+from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr
 from database_handler import execute_sql
 import random
 
@@ -197,24 +197,24 @@ def subject_description(subject_name):
     if '(' in subject_name:
         if '1' in subject_name:
             h = 'H1'
-        elif '3' in subject_name:
+        if '3' in subject_name:
             h = 'H3'
-        else:
-            h = 'H2'
+    else:
+        h = 'H2'
 
-    name = subject(subject_name.strip().split('(')[:-1])
+    name = subject(subject_name.strip().split('(')[0])
 
     if name == '':
         return ''
     else:
-        return h + name
+        return h + ' ' + name
 
 #Create Student Record
 @app.route("/create_student_record", methods = ['GET','POST'])
 def create_student_record():
     if request.method == 'POST':
         #Create Class object
-        new_class = Class(request.form.get('ClassName'), '')
+        new_class = Class(request.form.get('ClassName').strip(),'')
         execute_sql(new_class.create_new_record())
 
         #Create Student object
@@ -236,7 +236,7 @@ def create_student_record():
                 execute_sql(new_subject.create_new_record())
 
         #Create Seating Arrangement object
-        new_seating_arrangement = SeatingArrangement(request.form.get('StudentName'), CannotSeatNextTo = '', SeatInFront = False, WeakSubjects = '', StrongSubjects = '', ClassLst= '', SeatByGrades='', RowNo=0, ColumnNo=0)
+        new_seating_arrangement = SeatingArrangement(request.form.get('StudentName').strip(), CannotSeatNextTo = '', SeatInFront = False, WeakSubjects = '', StrongSubjects = '', ClassLst= '', SeatByGrades='', RowNo=0, ColumnNo=0)
         execute_sql(new_seating_arrangement.create_new_record())
 
         return redirect(url_for('display_all_student_records'))
@@ -287,10 +287,8 @@ def set_student_details():
 
     if class_seating_arrangement() != None:
         ClassName = class_seating_arrangement()
-        print(ClassName)
         lst = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(ClassName))
         lst = list(map(lambda x : x[0], lst)) #lst with all names of valid students
-        print(lst)
 
     if special_class_seating_arrangement()[1] != None:
         ClassList, Subject = special_class_seating_arrangement()
@@ -322,7 +320,6 @@ def set_student_details():
 
         #setting rest to default ClassLst = []
         student_lst = execute_sql("SELECT * FROM SeatingArrangement WHERE ClassLst != '{}'".format(string))
-        print(student_lst)
         student_lst = list(map(lambda x: x[0], student_lst))
         for i in student_lst:
             temp = execute_sql("SELECT * FROM SeatingArrangement WHERE StudentName = '{}'".format(i))[0]
@@ -337,7 +334,6 @@ def set_student_details():
         seatbygrades = request.form.get('SeatByGrades')  # strong pupils will seat next to weak pupils
         rowno = request.form.get('RowNo')
         columnno = request.form.get('ColumnNo')
-        print('set_student_details', seatbygrades, rowno, columnno)
 
         lst = execute_sql("SELECT * FROM SeatingArrangement WHERE ClassLst != ''")
         for student in lst:
@@ -366,8 +362,6 @@ def set_student_details():
             StudentName2 = request.form.get('StudentName2{}'.format(i))
 
             if StudentName1 != '' and StudentName1 != None:
-                print(StudentName1)
-                print(execute_sql('SELECT * FROM SeatingArrangement WHERE StudentName = "{}"'.format(StudentName1)))
                 student1 = execute_sql('SELECT * FROM SeatingArrangement WHERE StudentName = "{}"'.format(StudentName1))[0]
                 StudentName, CannotSeatNextTo, SeatInFront, WeakSubjects, StrongSubjects, ClassLst, SeatByGrades, RowNo, ColumnNo = student1
                 set_student = SeatingArrangement(StudentName, CannotSeatNextTo, SeatInFront, WeakSubjects,StrongSubjects, ClassLst, SeatByGrades, RowNo, ColumnNo)
@@ -586,6 +580,62 @@ def reset_seating_arrangement():
         student.set_RowNo(0)
         student.set_ColumnNo(0)
         execute_sql(student.update_record())
+
+@app.route("/show_saved_seatingarr/<string:username>", methods = ['GET', 'POST'])
+def show_saved_seatingarr(username):
+    username_details = execute_sql("SELECT * FROM User WHERE UserName == '{}'".format(username))[0]
+
+def show_current_seating_arrangement(seatarrseq):
+    temp = execute_sql('SELECT * FROM SeatingArrangement WHERE RowNo != 0')[0]
+    RowNo = temp[7]
+    ColumnNo = temp[8]
+    ClassSize = len(seatarrseq.split(','))
+    seatarrseq = seatarrseq.split(',')
+    SeatingArrangement_lst = []
+    pair = []
+    for i in seatarrseq:
+        i = i.replace("'",'"').strip('"[]"')
+        index = 0
+        for x in i:
+            if x.isalpha():
+                break
+            else:
+                index += 1
+        i = i[index:]
+        pair.append(i)
+
+        if len(pair) == 2:
+            SeatingArrangement_lst.append(pair)
+            pair = []
+    if len(pair) == 1:
+        SeatingArrangement_lst.append(pair)
+
+
+    count = 0
+    temp, result = [],[]
+
+    for row in range(RowNo):
+        for column in range(ColumnNo):
+            if count < ClassSize:
+                temp.append(SeatingArrangement_lst[row * ColumnNo + column])
+                if len(SeatingArrangement_lst[row * ColumnNo + column]) == 2:
+                    count += 2
+                if len(SeatingArrangement_lst[row * ColumnNo + column]) == 1:
+                    count += 1
+        result.append(temp)
+        temp = []
+    return render_template('generate_seating_arrangement.html', SeatingArrangement_lst = result, RowNo = RowNo, ColumnNo = ColumnNo, RowNoRange = range(RowNo), ColumnNoRange = range(ColumnNo), ClassSize = ClassSize)
+
+@app.route("/save_seatarr", methods = ['POST'])
+def save_seatarr():
+    seatarrname = request.form.get('savedname')
+    seatarrseq = request.form.get('SeatingArrangement_lst')
+    if seatarrname != '':
+        currentuser = execute_sql('SELECT * FROM CurrentUser')[0][0]
+        save = SavedSeatArr(currentuser, seatarrname, seatarrseq.replace("'", '"'))
+        execute_sql(save.create_new_record())
+    return show_current_seating_arrangement(seatarrseq)
+
 
 # run app
 if __name__ == "__main__":
