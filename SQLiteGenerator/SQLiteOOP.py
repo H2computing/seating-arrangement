@@ -492,10 +492,12 @@ class SavedSeatArr(object):
     """SQLite OOP class SavedSeatArr"""
 
     # initializer for classSavedSeatArr
-    def __init__(self, UserName, SeatArrName, SeatArrSeq):
+    def __init__(self, UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo):
         self._UserName = UserName
         self._SeatArrName = SeatArrName
         self._SeatArrSeq = SeatArrSeq
+        self._RowNo = RowNo
+        self._ColumnNo = ColumnNo
 
     # Mutator Functions
     def set_UserName(self, new_UserName):
@@ -507,6 +509,12 @@ class SavedSeatArr(object):
     def set_SeatArrSeq(self, new_SeatArrSeq):
         self._SeatArrSeq = new_SeatArrSeq
 
+    def set_RowNo(self, new_RowNo):
+        self._RowNo = new_RowNo
+
+    def set_ColumnNo(self, new_ColumnNo):
+        self._ColumnNo = new_ColumnNo
+
     # Accessor Functions
     def get_UserName(self):
         return self._UserName
@@ -516,6 +524,12 @@ class SavedSeatArr(object):
 
     def get_SeatArrSeq(self):
         return self._SeatArrSeq
+
+    def get_RowNo(self):
+        return self._RowNo
+
+    def get_ColumnNo(self):
+        return self._ColumnNo
 
     # String Representation of Class SavedSeatArr
     def __str__(self):
@@ -531,6 +545,8 @@ class SavedSeatArr(object):
         result += "UserName TEXT NOT NULL,\n"
         result += "SeatArrName TEXT NOT NULL,\n"
         result += "SeatArrSeq TEXT NOT NULL,\n"
+        result += "RowNo INTEGER NOT NULL DEFAULT 0,\n"
+        result += "ColumnNo INTEGER NOT NULL DEFAULT 0,\n"
         result += "PRIMARY KEY(UserName, SeatArrName),\n"
         result += "FOREIGN KEY (UserName) REFERENCES User(UserName)\n"
         result += ")\n"
@@ -540,16 +556,16 @@ class SavedSeatArr(object):
     def create_new_record(self):
         result = ""
         result += "INSERT INTO SavedSeatArr\n"
-        result += "(UserName, SeatArrName, SeatArrSeq)\n"
+        result += "(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo)\n"
         result += "VALUES\n"
-        result += "('{self._UserName}', '{self._SeatArrName}', '{self._SeatArrSeq}')\n".format(self=self)
+        result += "('{self._UserName}', '{self._SeatArrName}', '{self._SeatArrSeq}', '{self._RowNo}', '{self._ColumnNo}')\n".format(self=self)
         return result
 
     # SQLite: Update record based on primary key
     def update_record(self):
         result = ""
         result += "UPDATE SavedSeatArr SET\n"
-        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}', SeatArrSeq = '{self._SeatArrSeq}'\n".format(self=self)
+        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}', SeatArrSeq = '{self._SeatArrSeq}', RowNo = '{self._RowNo}', ColumnNo = '{self._ColumnNo}'\n".format(self=self)
         result += "WHERE\n"
         result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}'\n".format(self=self)
         return result

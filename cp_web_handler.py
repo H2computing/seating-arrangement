@@ -72,7 +72,7 @@ def display_all_student_records():
     return render_template("display_all_records.html", classes = classes_oop, students = students_oop, records = records_oop, subjects = subjects_oop)
 
 #edit records
-@app.route("/edit_records/<string:student_name>", methods = ["GET","POST"])
+@app.route("/edit_student_records/<string:student_name>", methods = ["GET","POST"])
 def edit_student_record(student_name):
     student_details = execute_sql("SELECT * FROM Student WHERE StudentName = '{}'".format(student_name))[0]
     StudentName, StudentRegNo, ClassName, StudentSubjectCombi, StudentGender, AllSubjectGrades = student_details
@@ -581,14 +581,7 @@ def reset_seating_arrangement():
         student.set_ColumnNo(0)
         execute_sql(student.update_record())
 
-@app.route("/show_saved_seatingarr/<string:username>", methods = ['GET', 'POST'])
-def show_saved_seatingarr(username):
-    username_details = execute_sql("SELECT * FROM User WHERE UserName == '{}'".format(username))[0]
-
-def show_current_seating_arrangement(seatarrseq):
-    temp = execute_sql('SELECT * FROM SeatingArrangement WHERE RowNo != 0')[0]
-    RowNo = temp[7]
-    ColumnNo = temp[8]
+def show_current_seating_arrangement(seatarrseq, RowNo, ColumnNo):
     ClassSize = len(seatarrseq.split(','))
     seatarrseq = seatarrseq.split(',')
     SeatingArrangement_lst = []
@@ -630,12 +623,54 @@ def show_current_seating_arrangement(seatarrseq):
 def save_seatarr():
     seatarrname = request.form.get('savedname')
     seatarrseq = request.form.get('SeatingArrangement_lst')
+    RowNo = int(request.form.get('RowNo'))
+    ColumnNo = int(request.form.get('ColumnNo'))
+
     if seatarrname != '':
         currentuser = execute_sql('SELECT * FROM CurrentUser')[0][0]
-        save = SavedSeatArr(currentuser, seatarrname, seatarrseq.replace("'", '"'))
+        save = SavedSeatArr(currentuser, seatarrname, seatarrseq.replace("'", '"'), RowNo, ColumnNo)
         execute_sql(save.create_new_record())
-    return show_current_seating_arrangement(seatarrseq)
+    return show_current_seating_arrangement(seatarrseq, RowNo, ColumnNo)
 
+@app.route("/show_saved_seatingarr", methods = ['GET', 'POST'])
+def show_saved_seatingarr():
+    username = execute_sql('SELECT * FROM CurrentUser')[0][0]
+    username_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}'".format(username))
+    seatarrname_lst = list(map(lambda x: x[1], username_details))
+    return render_template('show_saved_seatingarr.html', seatarrname_lst = seatarrname_lst)
+
+@app.route("/edit_saved_seatingarr/<string:seatarrname>")
+def edit_saved_seatingarr(seatarrname): #only can rename
+    newname = request.form.get('newname')
+    if newname != '':
+        username = execute_sql('SELECT * FROM CurrentUser')[0]
+        seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
+        UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo = seatarr_details
+        seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo)
+        seatarr.set_SeatArrName(newname)
+        execute_sql(seatarr.update_record())
+    return redirect(url_for("show_saved_seatingarr"))
+
+@app.route("/delete_saved_seatingarr/<string:seatarrname>", methods=['POST'])
+def delete_saved_seatingarr(seatarrname):
+    delete = request.form.get('delete')
+    if delete != 'False':
+        username = execute_sql('SELECT * FROM CurrentUser')[0]
+        seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
+        UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo = seatarr_details
+        seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo)
+        execute_sql(seatarr.delete_record())
+    return redirect(url_for("show_saved_seatingarr"))
+
+@app.route("/show_seatarr_by_name/<string:seatarrname>", methods = ['GET','POST'])
+def show_seatarr_by_name(seatarrname):
+    pass
+    '''username = execute_sql('SELECT * FROM CurrentUser')[0]
+    seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
+    seatarrseq = seatarr_details[2]
+    RowNo = seatarr_details[3]
+    ColumnNo = seatarr_details[4]
+    return render_template()'''
 
 # run app
 if __name__ == "__main__":
