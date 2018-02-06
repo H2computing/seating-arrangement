@@ -1,4 +1,4 @@
-from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr
+from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr, Comment
 import sqlite3
 import sys
 
@@ -38,6 +38,7 @@ def create_table():
     execute_sql(User.create_table())
     execute_sql(CurrentUser.create_table())
     execute_sql(SavedSeatArr.create_table())
+    execute_sql(Comment.create_table())
 
 #create_table()
 
@@ -56,7 +57,12 @@ def read_file(file_name):
             StudentSubjectCombi = lst[5]
             SubjectName = lst[6]
             Description = lst[7]
-            SubjectGrade = lst[8][:-1] #because of "\n" at the back
+            SubjectGrade = lst[8]
+            SeatArrName = lst[9]
+            CommentIDs = lst[10]
+            CommentID = lst[11]
+            CommentText = lst[12]
+            CommentDatetime = lst[13][:-1] #because of "\n" at the back
             c1 = Class(ClassName, TotalStudents)
             st1 = Student(StudentName, StudentRegNo, ClassName, StudentSubjectCombi, StudentGender, AllSubjectGrades = '')
             sr1 = StudentRecords(StudentName, SubjectGrade, SubjectName)
@@ -64,6 +70,8 @@ def read_file(file_name):
             sa1 = SeatingArrangement(StudentName, CannotSeatNextTo= '', SeatInFront= False,WeakSubjects='',StrongSubjects='', ClassLst = '', SeatByGrades= '' , RowNo = 0, ColumnNo=0)
             user1 = User(UserName = 'Ting Fang', Password='')
             currentuser1 = CurrentUser(UserName='Ting Fang')
+            comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName = "Ting Fang")
+            ssr1 = SavedSeatArr(UserName='Ting Fang',SeatArrName = SeatArrName,SeatArrSeq = "", RowNo= 0, ColumnNo=0, CommentIDs = CommentIDs)
             #TODO Username does not have to be class specific as CP will add in student info by themselves, most important is to do a back-end  validation to check if username is taken alr or not
             #TODO set user to an example user first, by right upon creating an account on login, user info will be created and added into User table
             #TODO set current user to nth by default until someone logins, then current user will become that username, must always reset current user
@@ -74,6 +82,8 @@ def read_file(file_name):
             execute_sql(sa1.create_new_record())
             execute_sql(user1.create_new_record())
             execute_sql(currentuser1.create_new_record())
+            execute_sql(comment.create_new_record())
+            execute_sql(ssr1.create_new_record())
             line = f.readline()
     f.close()
 

@@ -492,12 +492,13 @@ class SavedSeatArr(object):
     """SQLite OOP class SavedSeatArr"""
 
     # initializer for classSavedSeatArr
-    def __init__(self, UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo):
+    def __init__(self, UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = ""):
         self._UserName = UserName
         self._SeatArrName = SeatArrName
         self._SeatArrSeq = SeatArrSeq
         self._RowNo = RowNo
         self._ColumnNo = ColumnNo
+        self._CommentIDs = CommentIDs
 
     # Mutator Functions
     def set_UserName(self, new_UserName):
@@ -515,6 +516,24 @@ class SavedSeatArr(object):
     def set_ColumnNo(self, new_ColumnNo):
         self._ColumnNo = new_ColumnNo
 
+    def set_CommentIDs(self, new_CommentIDs):
+        if self._CommentIDs == "":
+            self._CommentIDs = new_CommentIDs
+        else:
+            self._CommentIDs += "," + new_CommentIDs
+
+    def delete_CommentIDs(self, CommentID):
+        temp = (self._CommentIDs.split(","))
+        result = ""
+        for ID in temp:
+            if ID != CommentID:
+                if result == "":
+                    result += ID
+                else:
+                    result += "," + ID
+
+        self._CommentIDs = result
+
     # Accessor Functions
     def get_UserName(self):
         return self._UserName
@@ -530,6 +549,9 @@ class SavedSeatArr(object):
 
     def get_ColumnNo(self):
         return self._ColumnNo
+
+    def get_CommentIDs(self):
+        return self._CommentIDs
 
     # String Representation of Class SavedSeatArr
     def __str__(self):
@@ -547,6 +569,7 @@ class SavedSeatArr(object):
         result += "SeatArrSeq TEXT NOT NULL,\n"
         result += "RowNo INTEGER NOT NULL DEFAULT 0,\n"
         result += "ColumnNo INTEGER NOT NULL DEFAULT 0,\n"
+        result += "CommentIDs TEXT ,\n"
         result += "PRIMARY KEY(UserName, SeatArrName),\n"
         result += "FOREIGN KEY (UserName) REFERENCES User(UserName)\n"
         result += ")\n"
@@ -556,16 +579,16 @@ class SavedSeatArr(object):
     def create_new_record(self):
         result = ""
         result += "INSERT INTO SavedSeatArr\n"
-        result += "(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo)\n"
+        result += "(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)\n"
         result += "VALUES\n"
-        result += "('{self._UserName}', '{self._SeatArrName}', '{self._SeatArrSeq}', '{self._RowNo}', '{self._ColumnNo}')\n".format(self=self)
+        result += "('{self._UserName}', '{self._SeatArrName}', '{self._SeatArrSeq}', '{self._RowNo}', '{self._ColumnNo}', '{self._CommentIDs}')\n".format(self=self)
         return result
 
     # SQLite: Update record based on primary key
     def update_record(self):
         result = ""
         result += "UPDATE SavedSeatArr SET\n"
-        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}', SeatArrSeq = '{self._SeatArrSeq}', RowNo = '{self._RowNo}', ColumnNo = '{self._ColumnNo}'\n".format(self=self)
+        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}', SeatArrSeq = '{self._SeatArrSeq}', RowNo = '{self._RowNo}', ColumnNo = '{self._ColumnNo}', CommentIDs = '{self._CommentIDs}'\n".format(self=self)
         result += "WHERE\n"
         result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}'\n".format(self=self)
         return result
@@ -633,6 +656,97 @@ class CurrentUser(object):
         result = ""
         result += "DELETE FROM CurrentUser WHERE\n"
         result += "UserName = '{self._UserName}'\n".format(self=self)
+        return result
+
+
+class Comment(object):
+    """SQLite OOP class Comment"""
+
+    # initializer for classComment
+    def __init__(self, SeatArrName, CommentID, CommentText, CommentDatetime, UserName):
+        self._SeatArrName = SeatArrName
+        self._CommentID = CommentID
+        self._CommentText = CommentText
+        self._CommentDatetime = CommentDatetime
+        self._UserName = UserName
+
+    # Mutator Functions
+    def set_SeatArrName(self, new_SeatArrName):
+        self._SeatArrName = new_SeatArrName
+
+    def set_CommentID(self, new_CommentID):
+        self._CommentID = new_CommentID
+
+    def set_CommentText(self, new_CommentText):
+        self._CommentText = new_CommentText
+
+    def set_CommentDatetime(self, new_CommentDatetime):
+        self._CommentDatetime = new_CommentDatetime
+
+    def set_UserName(self, new_UserName):
+        self._UserName = new_UserName
+
+    # Accessor Functions
+    def get_SeatArrName(self):
+        return self._SeatArrName
+
+    def get_CommentID(self):
+        return self._CommentID
+
+    def get_CommentText(self):
+        return self._CommentText
+
+    def get_CommentDatetime(self):
+        return self._CommentDatetime
+
+    def get_UserName(self):
+        return self._UserName
+
+    # String Representation of Class Comment
+    def __str__(self):
+        result = ""
+
+        return result
+
+    # SQLite: Create Table of Class Comment
+    @staticmethod
+    def create_table():
+        result = ""
+        result += "CREATE TABLE Comment(\n"
+        result += "SeatArrName TEXT NOT NULL,\n"
+        result += "CommentID INTEGER NOT NULL,\n"
+        result += "CommentText TEXT NOT NULL,\n"
+        result += "CommentDatetime TEXT NOT NULL,\n"
+        result += "UserName TEXT NOT NULL,\n"
+        result += "PRIMARY KEY(SeatArrName, CommentID),\n"
+        result += "FOREIGN KEY (SeatArrName) REFERENCES SavedSeatArr(SeatArrName),\n"
+        result += "FOREIGN KEY (UserName) REFERENCES User(UserName)\n"
+        result += ")\n"
+        return result
+
+    # SQLite: Create new record
+    def create_new_record(self):
+        result = ""
+        result += "INSERT INTO Comment\n"
+        result += "(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)\n"
+        result += "VALUES\n"
+        result += "('{self._SeatArrName}', '{self._CommentID}', '{self._CommentText}', '{self._CommentDatetime}', '{self._UserName}')\n".format(self=self)
+        return result
+
+    # SQLite: Update record based on primary key
+    def update_record(self):
+        result = ""
+        result += "UPDATE Comment SET\n"
+        result += "SeatArrName = '{self._SeatArrName}', CommentID = '{self._CommentID}', CommentText = '{self._CommentText}', CommentDatetime = '{self._CommentDatetime}', UserName = '{self._UserName}'\n".format(self=self)
+        result += "WHERE\n"
+        result += "SeatArrName = '{self._SeatArrName}', CommentID = '{self._CommentID}'\n".format(self=self)
+        return result
+
+    # SQLite: Delete record based on primary key
+    def delete_record(self):
+        result = ""
+        result += "DELETE FROM Comment WHERE\n"
+        result += "SeatArrName = '{self._SeatArrName}' and CommentID = '{self._CommentID}'\n".format(self=self)
         return result
 
 
