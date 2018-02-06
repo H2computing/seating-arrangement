@@ -14,15 +14,15 @@
 
     {% for seatarrname in seatarrname_lst %}
     <tr>
-        <td id = 'currentname'><a href="{{ url_for('show_seatarr_by_name',seatarrname) }}">{{ seatarrname }}</a></td>
+        <td id = 'currentname'><a href="{{ url_for('show_seatarr_by_name', seatarrname = seatarrname) }}">{{ seatarrname }}</a></td>
         <td>
-            <form action = '{{ url_for('edit_saved_seatingarr',seatarrname)}}' method = "POST">
+            <form action = "{{ url_for('edit_saved_seatingarr',seatarrname = seatarrname)}}" method = "POST">
                 <input type = 'hidden' name = 'newname' value = '' id = 'name'>
                 <input type = 'submit' value = 'Rename' onclick="editFunction()">
             </form>
         </td>
         <td>
-            <form action = '{{ url_for('delete_saved_seatingarr', seatarrname)}}' method = "POST">
+            <form action = "{{ url_for('delete_saved_seatingarr', seatarrname = seatarrname)}}" method = "POST">
                 <input type = 'hidden' name = 'delete' value = 'False' id = 'confirm_delete'>
                 <input type = 'submit' value = 'Delete' onclick="deleteFunction()">
             </form>
