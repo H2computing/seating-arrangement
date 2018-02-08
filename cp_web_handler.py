@@ -2,6 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect
 from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr, Comment
 from database_handler import execute_sql
 import random
+from datetime import date
 
 app = Flask(__name__)
 
@@ -717,11 +718,11 @@ def show_seatarr_by_name(seatarrname):
 def create_comment(seatarrname):
     if request.method == 'POST':
         error = False
-        if request.form['CommentText'].isspace() or request.form['CommentText'] == "":
-            error = "Invalid Comment Text, Please write something for Comment Text..."
-
-        elif request.form['UserName'].isspace() or request.form['UserName'] == "":
+        if request.form['UserName'].isspace() or request.form['UserName'] == "":
             error = "Invalid UserName, Please write something for UserName..."
+
+        elif request.form['CommentText'].isspace() or request.form['CommentText'] == "":
+            error = "Invalid Comment Text, Please write something for Comment Text..."
 
         if error != False:
             return render_template("create_comment.html", seatarrname = seatarrname, new_CommentID = request.form['CommentID'],
@@ -789,7 +790,7 @@ def delete_comment(comment_id):
         # Update DB
         execute_sql(delete_comment.delete_record())
 
-        UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = execute_sql("SELECT * FROM SavedSeatArr WHERE SeatArrName = '{}'".format(seatarrname))[0]
+        UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = execute_sql("SELECT * FROM SavedSeatArr WHERE SeatArrName = '{}'".format(SeatArrName))[0]
         edit_ssr = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
         edit_ssr.delete_CommentIDs(comment_id)
         execute_sql(edit_ssr.update_record())
@@ -803,11 +804,11 @@ def delete_comment(comment_id):
 
 @app.route("/show_saved_seatingarr/search_filter")
 def search_filter():
-    posts = execute_sql('SELECT * FROM Post')  # SQL Read
-    # print(posts)
-    posts_oop = list(map(lambda t: Post(t[0], t[1], t[2], t[3], t[4]), posts))
-    # print(posts_oop)
-    return render_template("search_filter.html", posts=posts_oop)
+    seatarr = execute_sql('SELECT * FROM SavedSeatArr')  # SQL Read
+    # print(seatarr)
+    seatarr_oop = list(map(lambda t: SavedSeatArr(t[0], t[1], t[2], t[3], t[4], t[5]), seatarr))
+    # print(seatarr_oop)
+    return render_template("search_filter.html", seatarr=seatarr_oop)
 
 # run app
 if __name__ == "__main__":

@@ -40,7 +40,7 @@ def create_table():
     execute_sql(SavedSeatArr.create_table())
     execute_sql(Comment.create_table())
 
-#create_table()
+create_table()
 
 #read the file result_data.csv, process the data and create records in database
 def read_file(file_name):
@@ -70,7 +70,7 @@ def read_file(file_name):
             sa1 = SeatingArrangement(StudentName, CannotSeatNextTo= '', SeatInFront= False,WeakSubjects='',StrongSubjects='', ClassLst = '', SeatByGrades= '' , RowNo = 0, ColumnNo=0)
             user1 = User(UserName = 'Ting Fang', Password='')
             currentuser1 = CurrentUser(UserName='Ting Fang')
-            comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName = "Ting Fang")
+            comment = Comment(SeatArrName, int(CommentID), CommentText, CommentDatetime, UserName = "Ting Fang")
             ssr1 = SavedSeatArr(UserName='Ting Fang',SeatArrName = SeatArrName,SeatArrSeq = "", RowNo= 0, ColumnNo=0, CommentIDs = CommentIDs)
             #TODO Username does not have to be class specific as CP will add in student info by themselves, most important is to do a back-end  validation to check if username is taken alr or not
             #TODO set user to an example user first, by right upon creating an account on login, user info will be created and added into User table
@@ -87,4 +87,4 @@ def read_file(file_name):
             line = f.readline()
     f.close()
 
-#read_file('result_data.csv')
+read_file('result_data.csv')
