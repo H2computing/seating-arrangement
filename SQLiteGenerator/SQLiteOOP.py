@@ -567,7 +567,7 @@ class SavedSeatArr(object):
         result += "UPDATE SavedSeatArr SET\n"
         result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}', SeatArrSeq = '{self._SeatArrSeq}', RowNo = '{self._RowNo}', ColumnNo = '{self._ColumnNo}'\n".format(self=self)
         result += "WHERE\n"
-        result += "UserName = '{self._UserName}', SeatArrName = '{self._SeatArrName}'\n".format(self=self)
+        result += "UserName = '{self._UserName}' and SeatArrName = '{self._SeatArrName}'\n".format(self=self)
         return result
 
     # SQLite: Delete record based on primary key
