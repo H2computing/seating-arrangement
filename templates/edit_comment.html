@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Comment</title>
+</head>
+<body>
+
+<h1>Edit Comment</h1>
+
+{% if error != False: %}
+<p>
+    {{error}}
+</p>
+{% endif %}
+
+<form action = "{{url_for('edit_comment', comment_id = edit_comment.get_CommentID())}}" method = "POST">
+    <p>Seat Arrangement Name:</p>
+    <input type = "text" size = "30" name = "SeatArrName" value = "{{edit_comment.get_SeatArrName()}}" readonly>
+
+    <p>Comment ID:</p>
+    <input type = "text" size = "30" name = "CommentID" value = "{{edit_comment.get_CommentID()}}" readonly>
+
+    <p>Comment Text:</p>
+    <input type = "text" size = "30" name = "CommentText" value = "{{edit_comment.get_CommentText()}}">
+
+    <p>Comment Date:</p>
+    <input type = "text" size = "30" name = "CommentDatetime" value = "{{edit_comment.get_CommentDatetime()}}" readonly>
+
+    <p>UserName:</p>
+    <input type = "text" size = "30" name = "UserName" value = "{{edit_comment.get_UserName()}}" readonly>
+
+    <p></p>
+    <input type = 'submit' value = 'Update'>
+
+</form>
+
+<p></p>
+<form action = "{{url_for('show_seatarr_by_name', seatarrname = edit_comment.get_SeatArrName())}}">
+    <input style = "font-size:32px" type="submit" value="Cancel" />
+</form>
+
+</body>
+</html>

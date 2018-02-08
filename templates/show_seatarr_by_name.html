@@ -2,9 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ seatarrname }}</title>
 </head>
 <body>
+
+<h1>{{ seatarrname }}</h1>
+<table style = 'width: 80%;table-layout: fixed' align="center" border = '1'>
+    <tr>
+        <th colspan = "{{ColumnNo*3 - 1}}">White Board</th>
+    </tr>
+</table>
+<table style = 'text-align: center' align="center" border = '1' cellpadding="20">
+    {% for row in RowNoRange %}
+    <tr>
+        {% for column in ColumnNoRange %}
+            {% if (row*ColumnNo*2 + column*2 + 1) <= ClassSize %}
+            <td rowspan="2" style = "width: 10px">{{ SeatingArrangement_lst[row][column][0] }}</td>
+            {% else %}
+            <td rowspan="2" style = "width: 10px">&nbsp;</td>
+            {% endif %}
+
+            {% if (row*ColumnNo*2 + column*2 + 2) <= ClassSize %}
+            <td rowspan="2" style = "width: 10px">{{ SeatingArrangement_lst[row][column][1] }}</td>
+            {% else %}
+            <td rowspan="2" style = "width: 10px">&nbsp;</td>
+            {% endif %}
+
+            {% if column != ColumnNo -1 %}
+            <td rowspan="2" style = "width: 5px" bgcolor="#888888">&nbsp;</td>
+            {% endif %}
+
+        {% endfor %}
+    </tr>
+    <tr>&nbsp;</tr>
+    {% endfor %}
+
+</table>
+<p></p>
+<hr>
+
+<h2>Comments</h2>
+
+<form action = "{{url_for('create_comment', seatarrname = seatarrname)}}">
+    <input style = "font-size:32px" type="submit" value="Create a comment" />
+</form>
+
+{% for comment in comments %}
+
+<p style = "font-weight: bold; font-size: 20px">
+    {{comment.get_UserName()}}
+</p>
+
+<p>
+    {{comment.get_CommentText()}}
+</p>
+
+<table style = "width:20%; text-align:left">
+
+    <tr>
+        <td style = "color: darkgrey">Created on {{comment.get_CommentDatetime()}}</td>
+        <td>
+            <form action = "{{url_for('edit_comment', comment_id = comment.get_CommentID())}}">
+                <input style = "font-size:32px" type="submit" value="Edit" />
+            </form>
+        </td>
+        <td>
+            <form action = "{{url_for('delete_comment', comment_id = comment.get_CommentID())}}">
+                <input style = "font-size:32px" type="submit" value="Delete" />
+            </form>
+        </td>
+    </tr>
+
+</table>
+<hr>
+
+{% endfor %}
 
 </body>
 </html>

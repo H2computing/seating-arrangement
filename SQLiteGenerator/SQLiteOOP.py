@@ -749,4 +749,3 @@ class Comment(object):
         result += "SeatArrName = '{self._SeatArrName}' and CommentID = '{self._CommentID}'\n".format(self=self)
         return result
 
-
