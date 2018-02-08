@@ -640,28 +640,31 @@ def show_saved_seatingarr():
     seatarrname_lst = list(map(lambda x: x[1], username_details))
     return render_template('show_saved_seatingarr.html', seatarrname_lst = seatarrname_lst)
 
-@app.route("/edit_saved_seatingarr/<string:seatarrname>")
+@app.route("/edit_saved_seatingarr/<string:seatarrname>", methods = ['POST'])
 def edit_saved_seatingarr(seatarrname): #only can rename
     newname = request.form.get('newname')
     if newname != '':
-        username = execute_sql('SELECT * FROM CurrentUser')[0]
+        username = execute_sql('SELECT * FROM CurrentUser')[0][0]
         seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
         UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo = seatarr_details
         seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo)
         seatarr.set_SeatArrName(newname)
-        execute_sql(seatarr.update_record())
-    return redirect(url_for("show_saved_seatingarr"))
+        execute_sql(''''UPDATE SavedSeatArr SET
+                    UserName, SeatArrName = "{}", SeatArrSeq, RowNo, ColumnNo
+                    WHERE 
+                    UserName and SeatArrName = "{}"'''.format(newname, seatarrname))
+    return show_saved_seatingarr()
 
 @app.route("/delete_saved_seatingarr/<string:seatarrname>", methods=['POST'])
 def delete_saved_seatingarr(seatarrname):
     delete = request.form.get('delete')
     if delete != 'False':
-        username = execute_sql('SELECT * FROM CurrentUser')[0]
+        username = execute_sql('SELECT * FROM CurrentUser')[0][0]
         seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
         UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo = seatarr_details
         seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo)
         execute_sql(seatarr.delete_record())
-    return redirect(url_for("show_saved_seatingarr"))
+    return show_saved_seatingarr()
 
 @app.route("/show_seatarr_by_name/<string:seatarrname>")
 def show_seatarr_by_name(seatarrname):
