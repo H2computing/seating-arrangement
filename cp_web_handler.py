@@ -699,9 +699,7 @@ def show_seatarr_by_name(seatarrname):
     count = 0
     temp, result = [], []
 
-    print("RowNo",RowNo)
     for row in range(RowNo):
-        print("k")
         for column in range(ColumnNo):
             if count < ClassSize:
                 temp.append(SeatingArrangement_lst[row * ColumnNo + column])
@@ -710,9 +708,7 @@ def show_seatarr_by_name(seatarrname):
                 if len(SeatingArrangement_lst[row * ColumnNo + column]) == 1:
                     count += 1
         result.append(temp)
-        print("result",result)
         temp = []
-    print(result)
     return render_template("show_seatarr_by_name.html", seatarrname=seatarrname, comments=comments_oop, SeatingArrangement_lst = result, RowNoRange = range(RowNo), ColumnNoRange = range(ColumnNo), ColumnNo = ColumnNo, ClassSize = ClassSize)
 
 
