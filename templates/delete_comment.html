@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Comment</title>
+</head>
+<body>
+
+<h1>Delete Comment</h1>
+<form action = "{{url_for('delete_comment', comment_id = delete_comment.get_CommentID())}}" method = "POST">
+    <p>Seat Arrangement Name:</p>
+    <input type = "text" size = "30" name = "SeatArrName" value = "{{delete_comment.get_SeatArrName()}}" readonly>
+
+    <p>Comment ID:</p>
+    <input type = "text" size = "30" name = "CommentID" value = "{{delete_comment.get_CommentID()}}" readonly>
+
+    <p>Comment Text:</p>
+    <input type = "text" size = "30" name = "CommentText" value = "{{delete_comment.get_CommentText()}}" readonly>
+
+    <p>Comment Date:</p>
+    <input type = "text" size = "30" name = "CommentDatetime" value = "{{delete_comment.get_CommentDatetime()}}" readonly>
+
+    <p>UserName:</p>
+    <input type = "text" size = "30" name = "UserName" value = "{{delete_comment.get_UserName()}}" readonly>
+
+    <p></p>
+    <input type = 'submit' value = 'Delete'>
+
+</form>
+
+<p></p>
+<form action = "{{url_for('show_seatarr_by_name', seatarrname = delete_comment.get_SeatArrName())}}">
+    <input style = "font-size:32px" type="submit" value="Cancel" />
+</form>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Comment</title>
+</head>
+<body>
+
+<h1>Create Comment</h1>
+
+{% if error != False: %}
+<p>
+    {{error}}
+</p>
+{% endif %}
+
+<form action = "{{url_for('create_comment', seatarrname = seatarrname)}}" method = "POST">
+    <p>Seat Arrangement Name:</p>
+    <input type = "text" size = "30" name = "SeatArrName" value = "{{seatarrname}}" readonly>
+
+    <p>UserName:</p>
+    <input type = "type" size = "30" name = "UserName" placeholder = "Enter your username...">
+
+    <p>Comment ID:</p>
+    <input type = "integer" size = "30" name = "CommentID" value = "{{new_CommentID}}" readonly>
+
+    <p>Comment Text:</p>
+    <input type = "text" size = "30" name = "CommentText" placeholder = "Write a comment..." >
+
+    <p>Comment Date:</p>
+    <input type = "text" size = "30" name = "CommentDatetime" value = "{{today}}" readonly>
+
+    <p></p>
+    <input type = 'submit' value = 'Create'>
+
+</form>
+
+<p></p>
+<form action = "{{url_for('show_seatarr_by_name', seatarrname = seatarrname)}}">
+    <input style = "font-size:32px" type="submit" value="Cancel" />
+</form>
+
+</body>
+</html>
