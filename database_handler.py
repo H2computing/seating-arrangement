@@ -2,7 +2,7 @@ from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, S
 import sqlite3
 import sys
 
-debug = True
+debug = False
 
 #Helper function, to execute 1 line of sql
 def execute_sql(sql):
@@ -40,7 +40,7 @@ def create_table():
     execute_sql(SavedSeatArr.create_table())
     execute_sql(Comment.create_table())
 
-create_table()
+#create_table()
 
 #read the file result_data.csv, process the data and create records in database
 def read_file(file_name):
@@ -87,4 +87,4 @@ def read_file(file_name):
             line = f.readline()
     f.close()
 
-read_file('result_data.csv')
+#read_file('result_data.csv')
