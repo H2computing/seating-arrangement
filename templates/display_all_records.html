@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Student Records</title>
+    <title>Home Page</title>
     <style>
         html{
             width: 100%;
@@ -23,12 +23,72 @@
             z-index: -1;
             opacity: 0.6;
         }
-        body
-        h1 {color: #928E94;}
+        .btn-group .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 93px 110px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 22px;
+            cursor: pointer;
+            width: 350px;
+            display: block;
+            border: none;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .btn-group .button1 {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-group .button1:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
+
+        .btn-group .button2 {
+            background-color: #008CBA;
+            color: white;
+        }
+
+        .btn-group .button2:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+        }
+
+        .btn-group .button3 {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-group .button3:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #f44336;
+        }
     </style>
 </head>
-<div>
 <body>
+
+<table style = "width: 100%; text-align: left">
+    <tr>
+        <th style = "width: 50%;">
+            <div class="btn-group">
+              <button class="button button1" href = '{{url_for('create_student_record')}}'>Create Student Record</button>
+              <button class="button button2" href = '{{url_for('set_seating_arrangement')}}'>Generate Seating Arrangement</button>
+              <button class="button button3" href = '{{url_for('show_saved_seatingarr')}}'>Show Saved Seating Arrangements</button>
+            </div>
+        </th>
+    </tr>
+</table>
+
 <h1>All Student Records</h1>
 
 <table style = "width: 100%; text-align: left">
@@ -64,13 +124,5 @@
     {% endfor %}
 </table>
 
-<p></p>
-<a href = '{{url_for('create_student_record')}}'>Create New Student Record</a>
-<p></p>
-<a href = '{{url_for('set_seating_arrangement')}}'>Generate Seating Arrangement</a>
-<p></p>
-<a href = '{{url_for('show_saved_seatingarr')}}'>Show Saved Seating  Arrangements</a>
-
 </body>
-</div>
 </html>
