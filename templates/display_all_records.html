@@ -24,54 +24,56 @@
             opacity: 0.6;
         }
         .btn-group .button {
+            font-family: "Hiragino Sans GB";
             background-color: #4CAF50;
             color: white;
-            padding: 93px 110px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
-            width: 350px;
-            display: block;
+            width: 33.3%;
             border: none;
             -webkit-transition-duration: 0.4s; /* Safari */
             transition-duration: 0.4s;
-            border-radius: 10px;
-            margin-bottom: 12px;
+            padding: 5px;
+            float: left;
         }
 
         .btn-group .button1 {
-            background-color: #4CAF50;
-            color: white;
+            background: url('https://previews.123rf.com/images/silm/silm1305/silm130500088/20010469-abstract-beige-background-sketchy-doodle-seamless-pattern-light-texture-with-circles-squares-and-oth.jpg');
+            color: black;
         }
 
         .btn-group .button1:hover {
-            background-color: white;
+            background: white;
             color: black;
-            border: 2px solid #4CAF50;
         }
 
         .btn-group .button2 {
-            background-color: #008CBA;
-            color: white;
+            background: url('http://www.myfreetextures.com/wp-content/uploads/2011/06/wood64b.jpg');
+            color: black;
+
         }
 
         .btn-group .button2:hover {
-            background-color: white;
+            background: white;
             color: black;
-            border: 2px solid #008CBA;
         }
 
         .btn-group .button3 {
-            background-color: #f44336;
-            color: white;
+            background: url('http://allfreedesigns.com/wp-content/uploads/2013/05/cork-texture-17.jpg');
+            color: black;
+            opacity: 0.9;
         }
 
         .btn-group .button3:hover {
-            background-color: white;
+            background: white;
             color: black;
-            border: 2px solid #f44336;
+            opacity: 1.0;
+        }
+        table{
+            font-family: "Hiragino Sans GB";
         }
     </style>
 </head>
@@ -81,17 +83,17 @@
     <tr>
         <th style = "width: 50%;">
             <div class="btn-group">
-              <button class="button button1" href = '{{url_for('create_student_record')}}'>Create Student Record</button>
-              <button class="button button2" href = '{{url_for('set_seating_arrangement')}}'>Generate Seating Arrangement</button>
-              <button class="button button3" href = '{{url_for('show_saved_seatingarr')}}'>Show Saved Seating Arrangements</button>
+                <button class="button button1" href = '{{url_for('create_student_record')}}'>Create Student Record</button>
+                <button class="button button2" href = '{{url_for('set_seating_arrangement')}}'>Generate Seating Arrangement</button>
+                <button class="button button3" href = '{{url_for('show_saved_seatingarr')}}'>Saved Seating Arrangements</button>
             </div>
         </th>
     </tr>
 </table>
+<hr>
+<h2 style = "font-family: 'Roboto'">All Student Records</h2>
 
-<h1>All Student Records</h1>
-
-<table style = "width: 100%; text-align: left">
+<table style = "width: 97%; text-align: left">
     {% for class in classes %}
     <tr>
         <th>{{ class.get_ClassName() }}</th>
