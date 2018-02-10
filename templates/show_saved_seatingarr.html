@@ -26,17 +26,17 @@
 
     {% for seatarrname in seatarrname_lst %}
     <tr>
-        <td><a id = 'currentname' href="{{ url_for('show_seatarr_by_name', seatarrname = seatarrname) }}">{{ seatarrname }}</a></td>
+        <td><a href="{{ url_for('show_seatarr_by_name', seatarrname = seatarrname) }}">{{ seatarrname }}</a></td>
         <td>
-            <form action = "{{ url_for('edit_saved_seatingarr',seatarrname = seatarrname)}}" method = "POST">
+            <form id = 'editform' action = "{{ url_for('edit_saved_seatingarr')}}" method = "POST">
                 <input type = 'hidden' name = 'newname' value = '' id = 'name'>
-                <input type = 'submit' value = 'Rename' onclick="editFunction()">
+                <input type = 'button' value = 'Rename' onclick='editFunction("{{ seatarrname }}")'>
             </form>
         </td>
         <td>
-            <form action = "{{ url_for('delete_saved_seatingarr', seatarrname = seatarrname)}}" method = "POST">
+            <form id = 'deleteform' action = "{{ url_for('delete_saved_seatingarr')}}" method = "POST">
                 <input type = 'hidden' name = 'delete' value = 'False' id = 'confirm_delete'>
-                <input type = 'submit' value = 'Delete' onclick="deleteFunction()">
+                <input type = 'button' value = 'Delete' onclick="deleteFunction('{{ seatarrname }}')">
             </form>
         </td>
     </tr>
@@ -48,20 +48,50 @@
 <a href = '{{ url_for('display_all_student_records') }}'>Back</a>
 
 <script>
-function editFunction() {
-    var txt = "Current name is " + document.getElementById("currentname").innerHTML;
-    var seatarrname = prompt(txt + '\nRename to:');
-    document.getElementById("name").value = seatarrname;
-}
-
-function deleteFunction() {
-    var txt = "Are you sure you want to delete " + document.getElementById("currentname").innerHTML;
-    var seatarrname = confirm(text + '?');
-    if (person == null || person == "") {
-    } else {
-        document.getElementById("confirm_delete").value = 'True';
+    function onlywhitespace(str){
+        return (str.trim() == ''); // boolean (`true` if field is empty)
     }
-}
+
+    function editFunction(currentname) {
+        var txt = "Current name is " + currentname;
+        var done = false;
+        while (done == false){
+            var seatarrname = prompt(txt + '\nRename to:');
+            /*if (seatarrname in {{ seatarrname_lst }}){
+                replaceFunction(currentname, seatarrname);
+                break
+            }*/
+            if (seatarrname == null){
+                var done = true;
+            }
+            if (seatarrname == "" || onlywhitespace(seatarrname) == true) {
+                alert('Empty entry, please fill in a valid name.');
+            }
+            else {
+                document.getElementById("name").value = seatarrname + ',' + currentname;
+                document.getElementById("editform").submit();
+                var done = true;
+            }
+        }
+
+    }
+
+    /*function replaceFunction(currentname, seatarrname){
+        var confirm_replace = confirm('A seating arrangement with this name already exists.\nDo you want to replace it?');
+        if (confirm_replace != null) {
+            document.getElementById("name").value = seatarrname + ',' + currentname + ',replace';
+            document.getElementById("editform").submit();
+        }
+    }*/
+
+    function deleteFunction(currentname) {
+        var txt = "Are you sure you want to delete " + currentname;
+        var confirm_delete = confirm(txt + '?');
+        if (confirm_delete != null && confirm_delete != '') {
+            document.getElementById("confirm_delete").value = currentname;
+            document.getElementById("deleteform").submit();
+        }
+    }
 </script>
 
 </body>

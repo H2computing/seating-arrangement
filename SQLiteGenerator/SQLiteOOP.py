@@ -739,7 +739,7 @@ class Comment(object):
         result += "UPDATE Comment SET\n"
         result += "SeatArrName = '{self._SeatArrName}', CommentID = '{self._CommentID}', CommentText = '{self._CommentText}', CommentDatetime = '{self._CommentDatetime}', UserName = '{self._UserName}'\n".format(self=self)
         result += "WHERE\n"
-        result += "SeatArrName = '{self._SeatArrName}' and CommentID = '{self._CommentID}'\n".format(self=self)
+        result += "CommentID = '{self._CommentID}'\n".format(self=self)
         return result
 
     # SQLite: Delete record based on primary key
@@ -748,4 +748,3 @@ class Comment(object):
         result += "DELETE FROM Comment WHERE\n"
         result += "SeatArrName = '{self._SeatArrName}' and CommentID = '{self._CommentID}'\n".format(self=self)
         return result
-

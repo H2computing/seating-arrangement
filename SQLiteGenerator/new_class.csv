@@ -30,7 +30,7 @@ SavedSeatArr;UserName;TEXT;NOT NULL;Yes;User(UserName);
 ;ColumnNo;INTEGER;NOT NULL DEFAULT 0;;
 ;CommentIDs;TEXT;;;
 CurrentUser;UserName;TEXT;NOT NULL;Yes;User(UserName)
-Comment;SeatArrName;TEXT;NOT NULL;Yes;SavedSeatArr(SeatArrName)
+Comment;SeatArrName;TEXT;NOT NULL;;SavedSeatArr(SeatArrName)
 ;CommentID;INTEGER;NOT NULL;Yes;
 ;CommentText;TEXT;NOT NULL;;
 ;CommentDatetime;TEXT;NOT NULL;;

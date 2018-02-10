@@ -640,30 +640,69 @@ def show_saved_seatingarr():
     seatarrname_lst = list(map(lambda x: x[1], username_details))
     return render_template('show_saved_seatingarr.html', seatarrname_lst = seatarrname_lst)
 
-@app.route("/edit_saved_seatingarr/<string:seatarrname>", methods = ['POST'])
-def edit_saved_seatingarr(seatarrname): #only can rename
+@app.route("/edit_saved_seatingarr", methods = ['POST'])
+def edit_saved_seatingarr(): #only can rename
     newname = request.form.get('newname')
-    if newname != '':
-        username = execute_sql('SELECT * FROM CurrentUser')[0][0]
-        seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
-        UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo = seatarr_details
-        seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo)
-        seatarr.set_SeatArrName(newname)
-        execute_sql(''''UPDATE SavedSeatArr SET
-                    UserName, SeatArrName = "{}", SeatArrSeq, RowNo, ColumnNo
-                    WHERE 
-                    UserName and SeatArrName = "{}"'''.format(newname, seatarrname))
+    replace = True
+    if len(newname.split(',')) == 2:
+        newname, seatarrname = newname.split(',')
+        replace = False
+
+    username = execute_sql('SELECT * FROM CurrentUser')[0][0]
+    '''if replace == True: #will have to delete all the comments and seating arrangement of the one that will be replaced
+        replace_seatarrs = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, newname))[0]
+        UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = replace_seatarrs
+        replace_seatarr = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
+        #delete SavedSeatArr obj
+        execute_sql(replace_seatarr.delete_record())
+        #delete_SavedSeatArr_obj
+        for commentid in CommentIDs:
+            replace_comments = execute_sql("SELECT * FROM Comment WHERE CommentID == '{}'".format(commentid))[0]
+            SeatArrName, CommentID, CommentText, CommentDatetime, UserName = replace_comments
+            replace_comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)
+            execute_sql(replace_comment.delete_record())
+    '''
+    seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
+    #print(seatarr_details)
+    UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo, CommentIDs = seatarr_details
+    seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
+    seatarr.set_SeatArrName(newname)
+    #Update SavedSeatArr
+    execute_sql('''UPDATE SavedSeatArr SET\nUserName = '{}', SeatArrName = "{}", SeatArrSeq = '{}', RowNo = '{}', ColumnNo = '{}', CommentIDs = '{}'\nWHERE \nUserName = '{}' and SeatArrName = "{}"'''.format(UserName, newname, SeatArrSeq, RowNo, ColumnNo, CommentIDs, UserName, seatarrname))
+
+    #Update Comment
+    if CommentIDs != '':
+        for commentid in CommentIDs.split(','):
+            print(execute_sql('SELECT * FROM Comment WHERE CommentID = "{}"'.format(commentid)))
+            comment_details = execute_sql('SELECT * FROM Comment WHERE CommentID = "{}"'.format(commentid))[0]
+            SeatArrName, CommentID, CommentText, CommentDatetime, UserName = comment_details
+            comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)
+            comment.set_SeatArrName(newname)
+            execute_sql(comment.update_record())
+
     return show_saved_seatingarr()
 
-@app.route("/delete_saved_seatingarr/<string:seatarrname>", methods=['POST'])
-def delete_saved_seatingarr(seatarrname):
+@app.route("/delete_saved_seatingarr", methods=['POST'])
+def delete_saved_seatingarr():
     delete = request.form.get('delete')
-    if delete != 'False':
-        username = execute_sql('SELECT * FROM CurrentUser')[0][0]
-        seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
-        UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo = seatarr_details
-        seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo)
-        execute_sql(seatarr.delete_record())
+    print('delete', delete)
+    seatarrname = delete
+    username = execute_sql('SELECT * FROM CurrentUser')[0][0]
+    seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
+    UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo, CommentIDs = seatarr_details
+    seatarr = SavedSeatArr(UserName,SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
+
+    #Delete SavedSeatArr object
+    execute_sql(seatarr.delete_record())
+
+    #Delete Comments linked to the SavedSeatArr
+    if CommentIDs != '':
+        for commentid in CommentIDs.split(','):
+            comment_details = execute_sql('SELECT * FROM Comment WHERE CommentID = "{}"'.format(commentid))[0]
+            SeatArrName, CommentID, CommentText, CommentDatetime, UserName = comment_details
+            comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)
+            execute_sql(comment.delete_record())
+
     return show_saved_seatingarr()
 
 @app.route("/show_seatarr_by_name/<string:seatarrname>")
