@@ -159,6 +159,9 @@ def delete_student_record(student_name):
     else:
         return render_template('delete_student_record.html', delete_student_details = delete_student_details)
 
+#TODO Adjust this function to make it be like the delete seating arrangement one (only window pops up asking user if want to delete)
+
+
 #Define subject names to their description:
 def subject_description(subject_name):
     def subject(name):
@@ -211,6 +214,7 @@ def subject_description(subject_name):
         return h + ' ' + name
 
 #Create Student Record
+#TODO State that GP and PW is automatically H1
 @app.route("/create_student_record", methods = ['GET','POST'])
 def create_student_record():
     if request.method == 'POST':
@@ -442,6 +446,8 @@ def sort_by_grades(student_lst):
         temp = []
     return grade_lst
 
+
+#TODO Adjust whiteboard length accordingly
 @app.route("/generate_seating_arrangement", methods=['GET', 'POST'])
 def generate_seating_arrangement():
     SeatInFront_lst = []
@@ -792,6 +798,7 @@ def create_comment(seatarrname):
         return render_template("create_comment.html", seatarrname = seatarrname, new_CommentID = new_CommentID, today = today)
 
 # edit comment
+#TODO edit such that a window pops up and asks for new comment text (ref edit seatarr)
 @app.route("/edit_comment/<string:comment_id>", methods=['GET', 'POST'])
 def edit_comment(comment_id):
     comment = execute_sql("SELECT * FROM Comment WHERE CommentID = '{}'".format(comment_id))[0]
@@ -821,6 +828,7 @@ def edit_comment(comment_id):
 
 
 # delete comment
+#TODO edit such that function only popsup a window asking user if want to delete (ref delete seatarr)
 @app.route("/delete_comment/<string:comment_id>", methods=['GET', 'POST'])
 def delete_comment(comment_id):
     comment = execute_sql("SELECT * FROM Comment WHERE CommentID = '{}'".format(comment_id))[0]
@@ -851,6 +859,13 @@ def search_filter():
     seatarr_oop = list(map(lambda t: SavedSeatArr(t[0], t[1], t[2], t[3], t[4], t[5]), seatarr))
     # print(seatarr_oop)
     return render_template("search_filter.html", seatarr=seatarr_oop)
+
+
+#TODO Adjust all html pages' UI
+#TODO How about Sec School Classes
+#TODO Validation for create student record
+#TODO Whats the use of register no.
+
 
 # run app
 if __name__ == "__main__":
