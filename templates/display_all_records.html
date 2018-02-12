@@ -22,7 +22,7 @@
             right: 0;
             position: absolute;
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.5;
         }
         .btn-group .button {
             font-family: "Hiragino Sans GB";
@@ -76,9 +76,9 @@
         table{
             font-family: "Hiragino Sans GB";
         }
-        table.info{
+        div.studentrecords{
             width: 100%;
-            height: 100px;
+            height: 670px;
             overflow: scroll;
         }
     </style>
@@ -98,8 +98,8 @@
 </table>
 <hr>
 <h2 style = "font-family: 'Roboto'">All Student Records</h2>
-
-<table class = "info" style = "width: 97%; text-align: left">
+<div class = "studentrecords">
+<table style = "width: 97%; text-align: left">
     {% for class in classes %}
     <tr>
         <th>{{ class.get_ClassName() }}</th>
@@ -131,6 +131,7 @@
     </tr>
     {% endfor %}
 </table>
+</div>
 
 </body>
 </html>

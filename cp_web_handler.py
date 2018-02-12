@@ -227,30 +227,39 @@ def create_student_record():
         if request.form['ClassName'].strip() == "":
             error = "Invalid Class, Please write something for Class..."
 
+        elif len(request.form['ClassName'].strip()) != 2:
+            error = "Invalid Class, Class should consist of one number and one letter (e.g. 6M)"
+
         elif len(request.form['ClassName'].strip()) == 2:
             if not (request.form['ClassName'].strip()[0].isdigit() and request.form['ClassName'][1].strip().isalpha()):
                 error = "Invalid Class, Class should consist of one number and one letter (e.g. 6M)"
+                return render_template("create_student_record.html", error=error)
 
         existing_students = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(request.form['ClassName'].strip()))
         existing_regno = list(map(lambda tuple: tuple[1], existing_students))
 
         if request.form['StudentName'].strip() == "":
             error = "Invalid Name, Please write something for Name..."
+            return render_template("create_student_record.html", error=error)
 
         elif hasNumbers(request.form['StudentName']):
             error = "Invalid Name, Name should not contain numbers"
+            return render_template("create_student_record.html", error=error)
 
         elif request.form['StudentRegNo'].strip() == "":
             error = "Invalid Register No., Please write something for Register No..."
+            return render_template("create_student_record.html", error=error)
 
         elif not request.form['StudentRegNo'].strip().isdigit():
             error = "Invalid Register No., Register No. should only consist of numbers"
+            return render_template("create_student_record.html", error=error)
 
-        elif request.form['StudentRegNo'].strip().isdigit():
-            if request.form['StudentRegNo'].strip() in existing_regno:
+        if request.form['StudentRegNo'].strip().isdigit():
+            if int(request.form['StudentRegNo'].strip()) in existing_regno:
                 error = "Register No. has already been used, please key in another register no."
+                return render_template("create_student_record.html", error=error)
 
-        elif request.form['StudentGender'].strip() == "":
+        if request.form['StudentGender'].strip() == "":
             error = "Invalid Gender, Please write something for Gender..."
 
         elif request.form['StudentGender'].strip() not in ["F","M"]:
