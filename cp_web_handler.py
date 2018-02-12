@@ -213,11 +213,61 @@ def subject_description(subject_name):
     else:
         return h + ' ' + name
 
+
+#function to check if any character in a string is a digit
+def hasNumbers(inputString):
+    return any(char.isdigit() for char in inputString)
+
+
 #Create Student Record
-#TODO State that GP and PW is automatically H1
 @app.route("/create_student_record", methods = ['GET','POST'])
 def create_student_record():
     if request.method == 'POST':
+        error = False
+        if request.form['ClassName'].strip() == "":
+            error = "Invalid Class, Please write something for Class..."
+
+        elif len(request.form['ClassName'].strip()) == 2:
+            if not (request.form['ClassName'].strip()[0].isdigit() and request.form['ClassName'][1].strip().isalpha()):
+                error = "Invalid Class, Class should consist of one number and one letter (e.g. 6M)"
+
+        existing_students = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(request.form['ClassName'].strip()))
+        existing_regno = list(map(lambda tuple: tuple[1], existing_students))
+
+        if request.form['StudentName'].strip() == "":
+            error = "Invalid Name, Please write something for Name..."
+
+        elif hasNumbers(request.form['StudentName']):
+            error = "Invalid Name, Name should not contain numbers"
+
+        elif request.form['StudentRegNo'].strip() == "":
+            error = "Invalid Register No., Please write something for Register No..."
+
+        elif not request.form['StudentRegNo'].strip().isdigit():
+            error = "Invalid Register No., Register No. should only consist of numbers"
+
+        elif request.form['StudentRegNo'].strip().isdigit():
+            if request.form['StudentRegNo'].strip() in existing_regno:
+                error = "Register No. has already been used, please key in another register no."
+
+        elif request.form['StudentGender'].strip() == "":
+            error = "Invalid Gender, Please write something for Gender..."
+
+        elif request.form['StudentGender'].strip() not in ["F","M"]:
+            error = "Invalid Gender, Gender should only be M or F"
+
+        elif request.form['StudentSubjectCombi'].strip() == "":
+            error = "Invalid Subject Combination, Please write something for Subject Combination..."
+
+        elif request.form['AllSubjectGrades'].strip() == "":
+            error = "Invalid Grades, Please write something for Grades..."
+
+        elif len(request.form['StudentSubjectCombi'].strip().split(" ")) != len(request.form['AllSubjectGrades'].strip().split(" ")):
+            error = "Number of grades should correspond to number of subjects keyed in"
+
+        if error != False:
+            return render_template("create_student_record.html", error = error)
+
         #Create Class object
         new_class = Class(request.form.get('ClassName').strip(),'')
         execute_sql(new_class.create_new_record())
@@ -862,9 +912,7 @@ def search_filter():
 
 
 #TODO Adjust all html pages' UI
-#TODO How about Sec School Classes
 #TODO Validation for create student record
-#TODO Whats the use of register no.
 
 
 # run app
