@@ -57,10 +57,10 @@
         var done = false;
         while (done == false){
             var seatarrname = prompt(txt + '\nRename to:');
-            /*if (seatarrname in {{ seatarrname_lst }}){
+            if (seatarrname in {{ seatarrname_lst }}){
                 replaceFunction(currentname, seatarrname);
                 break
-            }*/
+            }
             if (seatarrname == null){
                 var done = true;
             }
@@ -76,13 +76,13 @@
 
     }
 
-    /*function replaceFunction(currentname, seatarrname){
+    function replaceFunction(currentname, seatarrname){
         var confirm_replace = confirm('A seating arrangement with this name already exists.\nDo you want to replace it?');
         if (confirm_replace != null) {
             document.getElementById("name").value = seatarrname + ',' + currentname + ',replace';
             document.getElementById("editform").submit();
         }
-    }*/
+    }
 
     function deleteFunction(currentname) {
         var txt = "Are you sure you want to delete " + currentname;
