@@ -49,6 +49,18 @@
             font-family: 'Lato';
             font-size: 17px;
         }
+        ::placeholder {
+            color: #58585A;
+            opacity: 0.8; /* Firefox */
+        }
+
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+           color: #58585A;
+        }
+
+        ::-ms-input-placeholder { /* Microsoft Edge */
+           color: #58585A;
+        }
      </style>
 </head>
 <body>
@@ -62,26 +74,26 @@
 
 <form action = '{{ url_for('create_student_record')}}' method = "POST">
     <p class = "words">Name:</p>
-    <input class="transbox" type = "text" size = '30' name = 'StudentName' value = "" >
+    <input class="transbox" type = "text" size = '30' name = 'StudentName' value = "" placeholder = "Enter student name...">
 
     <p class = "words">Register No.:</p>
-    <input class="transbox" type = "text" size = '30' name = 'StudentRegNo' value = "" >
+    <input class="transbox" type = "text" size = '30' name = 'StudentRegNo' value = "" placeholder = "Enter student register no...">
 
     <p class = "words">Class:</p>
-    <input class="transbox" type = "text" size = '30' name = 'ClassName' value = "" >
+    <input class="transbox" type = "text" size = '30' name = 'ClassName' value = "" placeholder = "Enter class...">
 
     <p class = "words">Gender:</p>
-    <input class="transbox" type = "text" size = '30' name = 'StudentGender' value = "" >
+    <input class="transbox" type = "text" size = '30' name = 'StudentGender' value = "" placeholder = "Enter student gender...">
 
     <p class = "words">Subject Combination:</p>
     <p class = "notes">Note: Please write a space between each subject [E.g. PH CM MA EC GP]</p>
     <p class = "notes">For JC Students - State whether it is a H1/H2/H3 Subject [E.g. Ma(H1)]</p>
     <p class = "notes">GP and PW are automatically considered as H1 Subjects</p>
-    <input class="transbox" type = 'text' size = '30' name = 'StudentSubjectCombi' value = "">
+    <input class="transbox" type = 'text' size = '30' name = 'StudentSubjectCombi' value = "" placeholder = "Enter subject combination...">
 
     <p class = "words">Grades (in order):</p>
     <p class = "notes">Note: Please write a space between each grade [E.g. A B C D E]</p>
-    <input class="transbox" type = 'text' size = '30' name = 'AllSubjectGrades' value = ''>
+    <input class="transbox" type = 'text' size = '30' name = 'AllSubjectGrades' value = '' placeholder = "Enter subject grades...">
 
     <p></p>
     <input class = "transbox" style = "height:26px; font-size:17px" type = 'submit' value = 'Create'>
