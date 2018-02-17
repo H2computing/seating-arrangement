@@ -81,6 +81,38 @@ def edit_student_record(student_name):
 
     #StudentName cannot be changed as its the Primary Key
     if request.method == 'POST':
+        error = False
+        if request.form['StudentRegNo'].strip() == "":
+            error = "Invalid Register No., Please write something for Register No..."
+
+        elif not request.form['StudentRegNo'].strip().isdigit():
+            error = "Invalid Register No., Register No. should only consist of numbers"
+
+        existing_students = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(request.form['ClassName'].strip()))
+        existing_regno = list(map(lambda tuple: tuple[1], existing_students))
+
+        if request.form['StudentRegNo'].strip().isdigit():
+            if int(request.form['StudentRegNo'].strip()) in existing_regno:
+                error = "Register No. has already been used, please key in another register no."
+                return render_template("create_student_record.html", error=error)
+
+        if request.form['StudentGender'].strip() == "":
+            error = "Invalid Gender, Please write something for Gender..."
+
+        elif request.form['StudentGender'].strip() not in ["F", "M"]:
+            error = "Invalid Gender, Gender should only be M or F"
+
+        for i in request.form[SubjectName]:
+            if i.strip() == "":
+                error = "Invalid Subject, Please write something for Subject..."
+
+        for i in request.form[SubjectGrade]:
+            if i.strip() == "":
+                error = "Invalid Grade, Please write something for Grade..."
+
+        if error != False:
+            return render_template("edit_student_record.html", error=error)
+
         #Update Student Object
         edit_student_details.set_StudentRegNo(request.form.get('StudentRegNo').strip())
         edit_student_details.set_StudentGender(request.form.get('StudentGender').strip())
@@ -928,7 +960,6 @@ def search_filter():
 
 
 #TODO Adjust all html pages' UI
-#TODO Validation for create student record
 
 
 # run app
