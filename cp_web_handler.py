@@ -130,8 +130,9 @@ def edit_student_record(student_name):
         return render_template('edit_student_record.html', edit_student_details = edit_student_details, range = range(len(edit_student_details.get_AllSubjectGrades().split(' '))))
 
 #delete student record
-@app.route("/delete_student_record/<string:student_name>", methods = ['GET', 'POST'])
-def delete_student_record(student_name):
+@app.route("/delete_student_record", methods = ['POST'])
+def delete_student_record():
+    student_name = request.form.get('delete')
     student_details = execute_sql("SELECT * FROM Student WHERE StudentName = '{}'".format(student_name))[0]
     StudentName, StudentRegNo, ClassName, StudentSubjectCombi, StudentGender, AllSubjectGrades = student_details
     delete_student_details = Student(StudentName, StudentRegNo, ClassName, StudentSubjectCombi, StudentGender, AllSubjectGrades)
@@ -142,21 +143,25 @@ def delete_student_record(student_name):
     StudentName, CannotSeatNextTo, SeatInFront, WeakSubjects, StrongSubjects, ClassLst, SeatByGrades, RowNo, ColumnNo = seating_arrangement_record
     delete_seating_arrangement_record = SeatingArrangement(StudentName, CannotSeatNextTo, SeatInFront, WeakSubjects, StrongSubjects, ClassLst, SeatByGrades, RowNo, ColumnNo)
 
+    #Delete the database
+    execute_sql(delete_student_details.delete_record())
+    execute_sql(delete_seating_arrangement_record.delete_record())
+    for i in range(len(student_records)):
+        StudentName, SubjectGrade, SubjectName = student_records[i]
+        delete_student_record = StudentRecords(StudentName, SubjectGrade, SubjectName)
+        execute_sql(delete_student_record.delete_record())
 
-    if request.method == 'POST':
-        #Delete the database
-        execute_sql(delete_student_details.delete_record())
-        execute_sql(delete_seating_arrangement_record.delete_record())
-        for i in range(len(student_records)):
-            StudentName, SubjectGrade, SubjectName = student_records[i]
-            delete_student_record = StudentRecords(StudentName, SubjectGrade, SubjectName)
-            execute_sql(delete_student_record.delete_record())
+    #remove class if the class no longer has any students in it
+    students_from_class = execute_sql("SELECT * FROM Student WHERE ClassName == '{}'".format(ClassName))
+    if students_from_class == []:
+        class_details = execute_sql("SELECT * FROM Class WHERE ClassName == '{}'".format(ClassName))[0]
+        ClassName, TotalStudents = class_details
+        delete_class = Class(ClassName, TotalStudents)
+        execute_sql(delete_class.delete_record())
 
-        #Return to the main page
-        return redirect(url_for("display_all_student_records"))
+    #Return to the main page
+    return redirect(url_for("display_all_student_records"))
 
-    else:
-        return render_template('delete_student_record.html', delete_student_details = delete_student_details)
 
 #TODO Adjust this function to make it be like the delete seating arrangement one (only window pops up asking user if want to delete)
 
