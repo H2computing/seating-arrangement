@@ -83,7 +83,6 @@ def edit_student_record(student_name):
     if request.method == 'POST':
         #Update Student Object
         edit_student_details.set_StudentRegNo(request.form.get('StudentRegNo').strip())
-        edit_student_details.set_ClassName(request.form.get('ClassName').strip())
         edit_student_details.set_StudentGender(request.form.get('StudentGender').strip())
 
         new_StudentSubjectCombi = ''
@@ -712,21 +711,24 @@ def edit_saved_seatingarr(): #only can rename
     if len(newname.split(',')) == 2:
         newname, seatarrname = newname.split(',')
         replace = False
+    else:
+        newname, seatarrname, replace = newname.split(',')
+        replace = True
 
     username = execute_sql('SELECT * FROM CurrentUser')[0][0]
-    '''if replace == True: #will have to delete all the comments and seating arrangement of the one that will be replaced
+    if replace == True: #will have to delete all the comments and seating arrangement of the one that will be replaced
         replace_seatarrs = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, newname))[0]
         UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = replace_seatarrs
         replace_seatarr = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
         #delete SavedSeatArr obj
         execute_sql(replace_seatarr.delete_record())
         #delete_SavedSeatArr_obj
-        for commentid in CommentIDs:
+        for commentid in CommentIDs.split(','):
             replace_comments = execute_sql("SELECT * FROM Comment WHERE CommentID == '{}'".format(commentid))[0]
             SeatArrName, CommentID, CommentText, CommentDatetime, UserName = replace_comments
             replace_comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)
             execute_sql(replace_comment.delete_record())
-    '''
+
     seatarr_details = execute_sql("SELECT * FROM SavedSeatArr WHERE UserName == '{}' AND SeatArrName == '{}'".format(username, seatarrname))[0]
     #print(seatarr_details)
     UserName, SeatArrName , SeatArrSeq, RowNo, ColumnNo, CommentIDs = seatarr_details
