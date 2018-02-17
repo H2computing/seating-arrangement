@@ -2,7 +2,7 @@ from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, S
 import sqlite3
 import sys
 
-debug = True
+debug = False
 
 #Helper function, to execute 1 line of sql
 def execute_sql(sql):
