@@ -84,17 +84,21 @@ def edit_student_record(student_name):
         error = False
         if request.form['StudentRegNo'].strip() == "":
             error = "Invalid Register No., Please write something for Register No..."
+            return render_template("edit_student_record.html", edit_student_details=edit_student_details, error=error,
+                                   range=range(len(edit_student_details.get_AllSubjectGrades().split(' '))))
 
         elif not request.form['StudentRegNo'].strip().isdigit():
             error = "Invalid Register No., Register No. should only consist of numbers"
+            return render_template("edit_student_record.html", edit_student_details=edit_student_details, error=error,
+                                   range=range(len(edit_student_details.get_AllSubjectGrades().split(' '))))
 
         existing_students = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(request.form['ClassName'].strip()))
         existing_regno = list(map(lambda tuple: tuple[1], existing_students))
 
         if request.form['StudentRegNo'].strip().isdigit():
-            if int(request.form['StudentRegNo'].strip()) in existing_regno:
-                error = "Register No. has already been used, please key in another register no."
-                return render_template("create_student_record.html", error=error)
+            if int(request.form['StudentRegNo'].strip()) != StudentRegNo:
+                if int(request.form['StudentRegNo'].strip()) in existing_regno:
+                    error = "Register No. has already been used, please key in another register no."
 
         if request.form['StudentGender'].strip() == "":
             error = "Invalid Gender, Please write something for Gender..."
@@ -102,16 +106,15 @@ def edit_student_record(student_name):
         elif request.form['StudentGender'].strip() not in ["F", "M"]:
             error = "Invalid Gender, Gender should only be M or F"
 
-        for i in request.form[SubjectName]:
-            if i.strip() == "":
+        for i in range(len(StudentSubjectCombi.split(' '))):
+            if request.form['SubjectName{}'.format(i)].strip() == "":
                 error = "Invalid Subject, Please write something for Subject..."
 
-        for i in request.form[SubjectGrade]:
-            if i.strip() == "":
+            elif request.form['SubjectGrade{}'.format(i)].strip() == "":
                 error = "Invalid Grade, Please write something for Grade..."
 
         if error != False:
-            return render_template("edit_student_record.html", error=error)
+            return render_template("edit_student_record.html", edit_student_details = edit_student_details, error=error, range = range(len(edit_student_details.get_AllSubjectGrades().split(' '))))
 
         #Update Student Object
         edit_student_details.set_StudentRegNo(request.form.get('StudentRegNo').strip())
@@ -193,9 +196,6 @@ def delete_student_record():
 
     #Return to the main page
     return redirect(url_for("display_all_student_records"))
-
-
-#TODO Adjust this function to make it be like the delete seating arrangement one (only window pops up asking user if want to delete)
 
 
 #Define subject names to their description:
@@ -352,7 +352,7 @@ def set_seating_arrangement():
 @app.route("/class_seating_arrangement", methods = ['GET', 'POST'])
 def class_seating_arrangement():
     valid_classes = execute_sql("SELECT * FROM Class")
-    valid_classes = list(map(lambda x: x[0], valid_classes))
+    valid_classes = sorted(list(map(lambda x: x[0], valid_classes)))
 
     if request.method == 'POST':
         ClassName = request.form.get('ClassName')
@@ -363,9 +363,9 @@ def class_seating_arrangement():
 @app.route("/special_class_seating_arrangement", methods = ['GET', 'POST'])
 def special_class_seating_arrangement():
     valid_classes = execute_sql("SELECT * FROM Class")
-    valid_classes = list(map(lambda x: x[0], valid_classes))
+    valid_classes = sorted(list(map(lambda x: x[0], valid_classes)))
     valid_subjects = execute_sql("SELECT * FROM Subject")
-    valid_subjects = list(map(lambda x: x[0], valid_subjects))
+    valid_subjects = sorted(list(map(lambda x: x[0], valid_subjects)))
 
     if request.method == 'POST':
         subject_taken = request.form.get('SubjectName')
@@ -375,7 +375,7 @@ def special_class_seating_arrangement():
             if ClassName != None:
                 classes += ClassName + ' '
         classes = classes[:-1]
-        return classes,subject_taken
+        return classes,subject_taken, valid_classes, range(len(valid_classes)), valid_subjects
 
     else:
         return render_template('special_class_seating_arrangement.html', valid_classes = valid_classes, class_range = range(len(valid_classes)), valid_subjects = valid_subjects)
@@ -391,7 +391,7 @@ def set_student_details():
         lst = list(map(lambda x : x[0], lst)) #lst with all names of valid students
 
     if special_class_seating_arrangement()[1] != None:
-        ClassList, Subject = special_class_seating_arrangement()
+        ClassList, Subject, valid_classes, class_range, valid_subjects = special_class_seating_arrangement()
         ClassList = ClassList.split(' ')
         lst = []
         for i in ClassList:
@@ -542,7 +542,6 @@ def sort_by_grades(student_lst):
     return grade_lst
 
 
-#TODO Adjust whiteboard length accordingly
 @app.route("/generate_seating_arrangement", methods=['GET', 'POST'])
 def generate_seating_arrangement():
     SeatInFront_lst = []
@@ -896,7 +895,6 @@ def create_comment(seatarrname):
         return render_template("create_comment.html", seatarrname = seatarrname, new_CommentID = new_CommentID, today = today)
 
 # edit comment
-#TODO edit such that a window pops up and asks for new comment text (ref edit seatarr)
 @app.route("/edit_comment/<string:comment_id>", methods=['GET', 'POST'])
 def edit_comment(comment_id):
     comment = execute_sql("SELECT * FROM Comment WHERE CommentID = '{}'".format(comment_id))[0]
@@ -926,7 +924,6 @@ def edit_comment(comment_id):
 
 
 # delete comment
-#TODO edit such that function only popsup a window asking user if want to delete (ref delete seatarr)
 @app.route("/delete_comment/<string:comment_id>", methods=['GET', 'POST'])
 def delete_comment(comment_id):
     comment = execute_sql("SELECT * FROM Comment WHERE CommentID = '{}'".format(comment_id))[0]
@@ -957,9 +954,6 @@ def search_filter():
     seatarr_oop = list(map(lambda t: SavedSeatArr(t[0], t[1], t[2], t[3], t[4], t[5]), seatarr))
     # print(seatarr_oop)
     return render_template("search_filter.html", seatarr=seatarr_oop)
-
-
-#TODO Adjust all html pages' UI
 
 
 # run app

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
     <meta charset="UTF-8">
     <title>Generated Seating Arrangement</title>
     <style>
@@ -24,14 +26,50 @@
             z-index: -1;
             opacity: 0.5;
         }
+        h2{
+            font-size: 26px;
+            font-family: 'Roboto';
+        }
+        .whiteboard{
+            font-size: 20px;
+            font-family: 'Roboto';
+        }
+        .words{
+            font-family: 'Lato';
+            font-size: 18px;
+            weight: bold;
+        }
+        .cancel{
+            font-family: 'Lato';
+            font-size: 17px;
+        }
+        .transbox {
+          background: transparent;
+          border: 1.5px solid #58585A;
+          padding-top: 1.5px;
+          padding-bottom: 1.5px;
+          padding-left: 6.5px;
+          height: 27px;
+          font-size: 16px;
+        }
+        .notes{
+            color: #58585A;
+            font-family: 'Lato';
+            font-size: 16px;
+        }
+        div.overflow{
+            width: 100%;
+            height: 770px;
+            overflow: auto;
+        }
      </style>
 </head>
 <body>
-<h1>Generated Seating Arrangement</h1>
-
+<h2 style="height: 17px">Generated Seating Arrangement</h2>
+<div class = "overflow">
 <table style = 'width: 80%;table-layout: fixed' align="center" border = '1'>
     <tr>
-        <th colspan = "{{ColumnNo*3 - 1}}">White Board</th>
+        <th colspan = "{{ColumnNo*3 - 1}}" class="whiteboard">White Board</th>
     </tr>
 </table>
 <table style = 'text-align: center' align="center" border = '1' cellpadding="20">
@@ -39,13 +77,13 @@
     <tr>
         {% for column in ColumnNoRange %}
             {% if (row*ColumnNo*2 + column*2 + 1) <= ClassSize %}
-            <td rowspan="2" style = "width: 10px">{{ SeatingArrangement_lst[row][column][0] }}</td>
+            <td rowspan="2" style = "width: 10px" class="words">{{ SeatingArrangement_lst[row][column][0] }}</td>
             {% else %}
             <td rowspan="2" style = "width: 10px">&nbsp;</td>
             {% endif %}
 
             {% if (row*ColumnNo*2 + column*2 + 2) <= ClassSize %}
-            <td rowspan="2" style = "width: 10px">{{ SeatingArrangement_lst[row][column][1] }}</td>
+            <td rowspan="2" style = "width: 10px" class="words">{{ SeatingArrangement_lst[row][column][1] }}</td>
             {% else %}
             <td rowspan="2" style = "width: 10px">&nbsp;</td>
             {% endif %}
@@ -60,20 +98,21 @@
     {% endfor %}
 
 </table>
-
-<p>&nbsp;</p>
-<p>&nbsp;</p>
+<p></p>
 
 <form action = 'generate_seating_arrangement_again'>
-<input type= "submit" value = "Generate Another Seating Arrangement"/>
+<input class="transbox" type= "submit" value = "Generate Another Seating Arrangement"/>
 </form>
 
-<p>Do note that by going back to display menu or settings menu, all data you have inputted for your seating arrangement will be erased.</p>
-<p></p>
-<a href = '{{ url_for('set_seating_arrangement') }}'>Back To Settings Menu</a>
+<p class="notes">Note: By going to another page, this seating arrangement will be gone.</p>
+
+<a class="cancel" href = '{{ url_for('set_seating_arrangement') }}'>Back To Settings Menu</a>
 
 <p></p>
-<a href = '{{ url_for('display_all_student_records') }}'>Back to Display Menu</a>
+<a class="cancel" href = '{{ url_for('display_all_student_records') }}'>Back to Home Page</a>
+
+<p></p>
+<a class="cancel" href = '{{ url_for('show_saved_seatingarr') }}'>View Saved Seating Arrangements</a>
 
 <p></p>
 <form action = '{{ url_for('save_seatarr')}}' method = "POST">
@@ -81,9 +120,9 @@
     <input type = 'hidden' name = 'SeatingArrangement_lst' value = "{{(SeatingArrangement_lst)}}">
     <input type = 'hidden' name = 'RowNo' value = '{{RowNo}}'>
     <input type = 'hidden' name = 'ColumnNo' value = '{{ColumnNo}}'>
-    <input type = 'submit' value = 'Save this seating arrangement' onclick="myFunction()">
+    <input class="transbox" type = 'submit' value = 'Save this seating arrangement' onclick="myFunction()">
 </form>
-
+</div>
 <script>
 function myFunction() {
     var seatarrname = prompt("Please name your seating arrangement:");

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
     <meta charset="UTF-8">
     <title>Seating Arrangement Set-Up</title>
     <style>
@@ -23,26 +25,44 @@
             z-index: -1;
             opacity: 0.5;
         }
+        h2{
+            font-size: 26px;
+            font-family: 'Roboto';
+        }
+        .words{
+            font-family: 'Lato';
+            font-size: 18px;
+            weight: bold;
+        }
+        .cancel{
+            font-family: 'Lato';
+            font-size: 18px;
+        }
+        .transbox {
+          background: transparent;
+          border: 1.5px solid #58585A;
+          padding-top: 4.5px;
+          padding-bottom: 4.5px;
+          padding-left: 5px;
+          height: 31px;
+          font-size: 16px;
+        }
      </style>
 </head>
 <body>
-<h1>Seating Arrangement Set-Up</h1>
+<h2>Seating Arrangement Set-Up</h2>
 
-<p>Please choose the type of class your seating arrangement is for:</p>
+<p class = "words">Please choose the type of class your seating arrangement is for:</p>
 
-<p>If it is for a full class:</p>
-<form action = 'class_seating_arrangement'>
-<input type="submit" value="Click Here" />
-</form>
+<p class = "words">If it is for a full class:</p>
+<input class = "transbox" type="submit" onclick ="location.href = '{{url_for('class_seating_arrangement')}}'" value="Click Here" />
 
-<p>If it is for other classes:</p>
-<p>i.e. History classes which only part of the class takes</p>
-<form action = 'special_class_seating_arrangement'>
-<input type= "submit" value = "Click Here"/>
-</form>
+<p class = "words">If it is for other classes:</p>
+<p class = "words">i.e. History classes which only part of the class takes</p>
+<input class = "transbox" type="submit" onclick ="location.href = '{{url_for('special_class_seating_arrangement')}}'" value = "Click Here"/>
 
 <p></p>
-<a href = '{{ url_for('display_all_student_records') }}'>Cancel</a>
+<a class = "cancel" href = '{{ url_for('display_all_student_records') }}'>Cancel</a>
 
 </body>
 </html>
