@@ -6,8 +6,14 @@ from datetime import date
 
 app = Flask(__name__)
 
-#display page
+#google signin
 @app.route("/")
+def google_sign_in():
+    return render_template("google_sign_in.html")
+
+
+#display page
+@app.route("/display_all_student_records")
 def display_all_student_records():
     classes = execute_sql("SELECT * FROM Class")
     students = execute_sql("SELECT * FROM Student")
