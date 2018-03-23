@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
-<link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
+
     <meta charset="UTF-8">
     <title>{{ seatarrname }}</title>
     <style>
@@ -126,11 +130,9 @@
             </form>
         </td>
         <td>
-            <form action = "{{url_for('delete_comment', comment_id = comment.get_CommentID())}}">
-                <input class="transbox" style = "font-size:16px" type="submit" value="Delete" />
             <form id = 'deleteform' action = "{{ url_for('delete_comment')}}" method = "POST">
                 <input type = 'hidden' name = 'delete' value = 'False' id = 'confirm_delete'>
-                <input style = "font-size: 32px" type = 'button' value = 'Delete' onclick="deleteFunction('{{ comment.get_CommentID() }}')">
+                <input class = 'transbox' style = "font-size:16px" type = 'button' value = 'Delete' onclick="deleteFunction('{{ comment.get_CommentID() }}')">
             </form>
         </td>
     </tr>
@@ -153,5 +155,6 @@
 </script>
 
 </div>
+
 </body>
 </html>
