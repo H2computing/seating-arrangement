@@ -7,13 +7,13 @@ from datetime import date
 app = Flask(__name__)
 
 #google signin
-@app.route("/")
+@app.route("/w")
 def google_sign_in():
     return render_template("google_sign_in.html")
 
 
 #display page
-@app.route("/display_all_student_records")
+@app.route("/")
 def display_all_student_records():
     classes = execute_sql("SELECT * FROM Class")
     students = execute_sql("SELECT * FROM Student")
