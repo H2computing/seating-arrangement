@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Seating Arrangement Set-Up</title>
     <style>
         html{
             width: 100%;
@@ -23,19 +25,35 @@
             z-index: -1;
             opacity: 0.5;
         }
+        h2{
+            font-size: 26px;
+            font-family: 'Roboto';
+        }
+        .words{
+            font-family: 'Lato';
+            font-size: 18px;
+            weight: bold;
+        }
+        .cancel{
+            font-family: 'Lato';
+            font-size: 18px;
+        }
+        .transbox {
+          background: transparent;
+          border: 1.5px solid #58585A;
+          padding-top: 1.5px;
+          padding-bottom: 1.5px;
+          padding-left: 5px;
+          height: 25px;
+          font-size: 16px;
+        }
      </style>
-</head><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Seating Arrangement Set-Up</title>
 </head>
-
 <body>
-<h1>Seating Arrangement Set-Up</h1>
+<h2>Seating Arrangement Set-Up</h2>
 
 <form action = '{{ url_for('class_seating_arrangement')}}' method = "POST">
-    <p>Class:</p>
+    <p class = "words">Class:</p>
     <select name = "ClassName" value = "{{valid_classes[0]}}">
         {% for class in valid_classes%}
         <option>{{class}}</option>
@@ -43,13 +61,11 @@
     </select>
 
     <p></p>
-    <input type="submit" formaction="set_student_details" value="Next">
-
-
+    <input class = "transbox" type="submit" formaction="set_student_details" value="Next">
 </form>
 
 <p></p>
-<a href = '{{ url_for('set_seating_arrangement') }}'>Back</a>
+<a class="cancel" href = '{{ url_for('set_seating_arrangement') }}'>Back</a>
 
 
 </body>

@@ -28,7 +28,11 @@
         .transbox {
           background: transparent;
           border: 1.5px solid #58585A;
+          padding-top: 4.5px;
+          padding-bottom: 4.5px;
+          padding-left: 2px;
           height: 17px;
+          font-size: 16px;
         }
         h2{
             font-size: 26px;
@@ -42,12 +46,11 @@
         .words{
             font-family: 'Lato';
             font-size: 18px;
-            font
             weight: bold;
         }
         .cancel{
             font-family: 'Lato';
-            font-size: 17px;
+            font-size: 18px;
         }
         ::placeholder {
             color: #58585A;
@@ -67,7 +70,7 @@
 <h2>Create Student Record</h2>
 
 {% if error != False: %}
-<p style="color:#BF3F36; font-family: 'Roboto'; font-size: 18px">
+<p style="color:#BF3F36; font-family: 'Roboto'; font-size: 19px">
     <b>{{error}}</b>
 </p>
 {% endif %}
@@ -88,7 +91,6 @@
     <p class = "words">Subject Combination:</p>
     <p class = "notes">Note: Please write a space between each subject [E.g. PH CM MA EC GP]</p>
     <p class = "notes">For JC Students - State whether it is a H1/H2/H3 Subject [E.g. Ma(H1)]</p>
-    <p class = "notes">GP and PW are automatically considered as H1 Subjects</p>
     <input class="transbox" type = 'text' size = '30' name = 'StudentSubjectCombi' value = "" placeholder = "Enter subject combination...">
 
     <p class = "words">Grades (in order):</p>
@@ -96,7 +98,7 @@
     <input class="transbox" type = 'text' size = '30' name = 'AllSubjectGrades' value = '' placeholder = "Enter subject grades...">
 
     <p></p>
-    <input class = "transbox" style = "height:26px; font-size:17px" type = 'submit' value = 'Create'>
+    <input class = "transbox" style = "padding: 1px; padding-left: 3px; padding-right:3px; height:28px; font-size:17px" type = 'submit' value = 'Create'>
 
 </form>
 

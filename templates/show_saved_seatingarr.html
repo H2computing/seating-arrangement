@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
     <meta charset="UTF-8">
     <title>Saved Seating Arrangements</title>
     <style>
@@ -23,18 +25,42 @@
             z-index: -1;
             opacity: 0.5;
         }
+        h2{
+            font-size: 26px;
+            font-family: 'Roboto';
+        }
+        .words{
+            font-family: 'Lato';
+            font-size: 18px;
+            weight: bold;
+        }
+        .transbox {
+          background: transparent;
+          border: 1.5px solid #58585A;
+          padding-top: 1.5px;
+          padding-bottom: 1.5px;
+          padding-left: 6.5px;
+          height: 27px;
+          font-size: 16px;
+          font-family: 'Lato';
+        }
+        div.overflow{
+            width: 100%;
+            height: 770px;
+            overflow: auto;
+        }
     </style>
 </head>
 <body>
-
+<div class = "overflow">
 <table style = "width:99%">
-    <tr>
+    <tr >
         <th align = "left">
-            <h1>Saved Seating Arrangements</h1>
+            <h2 style="height: 17px">Saved Seating Arrangements</h2>
         </th>
         <th align = "right">
             <form action = "{{url_for('search_filter')}}">
-                <input style = "font-size:32px" type="submit" value="Search" />
+                <input class="transbox" style = "font-size:20px; height:32px" type="submit" value="Search" />
             </form>
         </th>
     </tr>
@@ -42,22 +68,22 @@
 
 <table style = "width: 100%; text-align: left">
     <tr>
-        <th>Name:</th>
+        <th class="words" style="font-size:20px"><b>Name:</b></th>
     </tr>
 
     {% for seatarrname in seatarrname_lst %}
     <tr>
-        <td><a href="{{ url_for('show_seatarr_by_name', seatarrname = seatarrname) }}">{{ seatarrname }}</a></td>
-        <td>
+        <td style = "width:50%"><a class="words" style="font-size: 17px" href="{{ url_for('show_seatarr_by_name', seatarrname = seatarrname) }}">{{ seatarrname }}</a></td>
+        <td style = "width:5%">
             <form id = 'editform' action = "{{ url_for('edit_saved_seatingarr')}}" method = "POST">
                 <input type = 'hidden' name = 'newname' value = '' id = 'name'>
-                <input type = 'button' value = 'Rename' onclick='editFunction("{{ seatarrname}}", "{{ seatarrname_lst }}")'>
+                <input class="transbox" type = 'button' value = 'Rename' onclick='editFunction("{{ seatarrname}}", "{{ seatarrname_lst }}")'>
             </form>
         </td>
-        <td>
+        <td style = "width:10%">
             <form id = 'deleteform' action = "{{ url_for('delete_saved_seatingarr')}}" method = "POST">
                 <input type = 'hidden' name = 'delete' value = 'False' id = 'confirm_delete'>
-                <input type = 'button' value = 'Delete' onclick="deleteFunction('{{ seatarrname }}')">
+                <input class="transbox" type = 'button' value = 'Delete' onclick="deleteFunction('{{ seatarrname }}')">
             </form>
         </td>
     </tr>
@@ -66,8 +92,8 @@
 </table>
 
 <p></p>
-<a href = '{{ url_for('display_all_student_records') }}'>Back</a>
-
+<a class="transbox" style="font-size:18px;padding:5px;height:20px;" onclick ="location.href = '{{ url_for('display_all_student_records') }}'">Return to Home Page</a>
+</div>
 <script>
     function onlywhitespace(str){
         return (str.trim() == ''); // boolean (`true` if field is empty)

@@ -912,7 +912,6 @@ def delete_comment():
         edit_ssr.delete_CommentIDs(comment_id)
         execute_sql(edit_ssr.update_record())
 
-
         # Return to mainpage
         return redirect(url_for("show_seatarr_by_name", seatarrname = SeatArrName))
 
