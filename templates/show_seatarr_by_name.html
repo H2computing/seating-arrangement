@@ -93,8 +93,9 @@
             </form>
         </td>
         <td>
-            <form action = "{{url_for('delete_comment', comment_id = comment.get_CommentID())}}">
-                <input style = "font-size:32px" type="submit" value="Delete" />
+            <form id = 'deleteform' action = "{{ url_for('delete_comment')}}" method = "POST">
+                <input type = 'hidden' name = 'delete' value = 'False' id = 'confirm_delete'>
+                <input style = "font-size: 32px" type = 'button' value = 'Delete' onclick="deleteFunction('{{ comment.get_CommentID() }}')">
             </form>
         </td>
     </tr>
@@ -103,6 +104,18 @@
 <hr>
 
 {% endfor %}
+
+<script>
+    function deleteFunction(CommentID) {
+        var txt = "Are you sure you want to delete this comment?";
+        var confirm_delete = confirm(txt);
+        console.log('confirm_delete:',confirm_delete);
+        if (confirm_delete != false && confirm_delete != '') {
+            document.getElementById("confirm_delete").value = CommentID;
+            document.getElementById("deleteform").submit();
+        }
+    }
+</script>
 
 </body>
 </html>

@@ -895,8 +895,9 @@ def edit_comment(comment_id):
 
 # delete comment
 #TODO edit such that function only popsup a window asking user if want to delete (ref delete seatarr)
-@app.route("/delete_comment/<string:comment_id>", methods=['GET', 'POST'])
-def delete_comment(comment_id):
+@app.route("/delete_comment", methods=['POST'])
+def delete_comment():
+    comment_id = request.form.get('delete')
     comment = execute_sql("SELECT * FROM Comment WHERE CommentID = '{}'".format(comment_id))[0]
     #print(comment)
     SeatArrName, CommentID, CommentText, CommentDatetime, UserName = comment
@@ -910,6 +911,7 @@ def delete_comment(comment_id):
         edit_ssr = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
         edit_ssr.delete_CommentIDs(comment_id)
         execute_sql(edit_ssr.update_record())
+
 
         # Return to mainpage
         return redirect(url_for("show_seatarr_by_name", seatarrname = SeatArrName))
