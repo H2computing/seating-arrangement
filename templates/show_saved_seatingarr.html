@@ -152,13 +152,14 @@
     function deleteFunction(currentname) {
         var txt = "Are you sure you want to delete " + currentname;
         var confirm_delete = confirm(txt + '?');
+</script>
+
+</body>
+</html>
+
         console.log('confirm_delete:',confirm_delete);
         if (confirm_delete != false && confirm_delete != '') {
             document.getElementById("confirm_delete").value = currentname;
             document.getElementById("deleteform").submit();
         }
     }
-</script>
-
-</body>
-</html>
