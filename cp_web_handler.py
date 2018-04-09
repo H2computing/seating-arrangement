@@ -409,6 +409,16 @@ def set_student_details():
         rowno = request.form.get('RowNo')
         columnno = request.form.get('ColumnNo')
 
+        error = False
+        if rowno.isspace() or rowno == "":
+            error = "Invalid Row No., Please write something for Row No...."
+
+        elif columnno.isspace() or columnno == "":
+            error = "Invalid Column No., Please write something for Column No..."
+
+        if error != False:
+            return render_template('set_student_details.html', Students = lst, student_range = range(len(lst)), range = range(5), Subject = Subject, error = error)
+
         lst = execute_sql("SELECT * FROM SeatingArrangement WHERE ClassLst != ''")
         for student in lst:
             StudentName, CannotSeatNextTo, SeatInFront, WeakSubjects, StrongSubjects, ClassLst, SeatByGrades, RowNo, ColumnNo = student
