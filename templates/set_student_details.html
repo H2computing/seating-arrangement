@@ -115,7 +115,16 @@
     <p class = "notes" style="height: 10px; margin-top: 10px">Pupils who are weak in certain subjects will seat next to those who are strong in that subject.</p>
     <p class = "notes">This may not be 100% fulfilled as student's request to seat in front is prioritised.</p>
 
-    <button class="transbox" style="height: 24px" type= "submit" formaction="generate_seating_arrangement">Next</button>
+    {% if error == False:%}
+    {% endif %}
+
+    {% if error == False: %}
+        <button class="transbox" style="height: 24px" type= "submit" formaction="generate_seating_arrangement">Next</button>
+    {% else: %}
+        {% print('k') %}
+        {% print('error', error) %}
+        <button class="transbox" style="height: 24px" type= "submit" formaction="set_student_details">Next</button>
+    {% endif %}
 </form>
 
 <p class = "notes">Note: By going back, all information entered will be gone.</p>

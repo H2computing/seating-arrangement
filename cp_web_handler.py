@@ -402,7 +402,7 @@ def set_student_details():
             new_classlst.set_ClassLst('')
             execute_sql(new_classlst.update_record())
 
-        return render_template('set_student_details.html', Students=lst, student_range=range(len(lst)), range=range(5),Subject=Subject)
+        return render_template('set_student_details.html', Students=lst, student_range=range(len(lst)), range=range(5),Subject=Subject, error = False)
 
     if request.method == 'POST':
         seatbygrades = request.form.get('SeatByGrades')  # strong pupils will seat next to weak pupils
@@ -410,10 +410,10 @@ def set_student_details():
         columnno = request.form.get('ColumnNo')
 
         error = False
-        if rowno.isspace() or rowno == "":
+        if rowno.strip() == "":
             error = "Invalid Row No., Please write something for Row No...."
 
-        elif columnno.isspace() or columnno == "":
+        elif columnno.strip() == "":
             error = "Invalid Column No., Please write something for Column No..."
 
         if error != False:
@@ -460,7 +460,7 @@ def set_student_details():
 
 
     else:
-        return render_template('set_student_details.html', Students = lst, student_range = range(len(lst)), range = range(5), Subject = Subject)
+        return render_template('set_student_details.html', Students = lst, student_range = range(len(lst)), range = range(5), Subject = Subject, error = False)
 
 def sort_by_grades(student_lst):
     #best scenario: Student A can help Student B and vice versa
