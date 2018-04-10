@@ -355,14 +355,19 @@ def special_class_seating_arrangement():
         return render_template('special_class_seating_arrangement.html', valid_classes = valid_classes, class_range = range(len(valid_classes)), valid_subjects = valid_subjects)
 
 @app.route("/set_student_details", methods=['GET', 'POST'])
-def set_student_details():
+def set_student_details(error = False, ClassName = ""):
     Subject = None
     lst = []
 
-    if class_seating_arrangement() != None:
-        ClassName = class_seating_arrangement()
+    class_seating = class_seating_arrangement()
+    if class_seating != None and len(class_seating) < 100:
+        ClassName = class_seating
         lst = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(ClassName))
         lst = list(map(lambda x : x[0], lst)) #lst with all names of valid students
+
+    else:
+        lst = execute_sql("SELECT * FROM Student WHERE ClassName = '{}'".format(ClassName))
+        lst = list(map(lambda x: x[0], lst))  # lst with all names of valid students
 
     if special_class_seating_arrangement()[1] != None:
         ClassList, Subject = special_class_seating_arrangement()
@@ -402,7 +407,8 @@ def set_student_details():
             new_classlst.set_ClassLst('')
             execute_sql(new_classlst.update_record())
 
-        return render_template('set_student_details.html', Students=lst, student_range=range(len(lst)), range=range(5),Subject=Subject, error = False)
+        if error != False:
+            return render_template('set_student_details.html', Students=lst, student_range=range(len(lst)), range=range(5),Subject=Subject, error = False, ClassName = ClassName)
 
     if request.method == 'POST':
         seatbygrades = request.form.get('SeatByGrades')  # strong pupils will seat next to weak pupils
@@ -415,9 +421,9 @@ def set_student_details():
 
         elif columnno.strip() == "":
             error = "Invalid Column No., Please write something for Column No..."
-
+        print(error)
         if error != False:
-            return render_template('set_student_details.html', Students = lst, student_range = range(len(lst)), range = range(5), Subject = Subject, error = error)
+            return redirect(url_for('set_student_details', error = error, ClassName = request.form.get('ClassName')))
 
         lst = execute_sql("SELECT * FROM SeatingArrangement WHERE ClassLst != ''")
         for student in lst:
@@ -458,9 +464,10 @@ def set_student_details():
                 set_student.set_CannotSeatNextTo(StudentName1)
                 execute_sql(set_student.update_record())
 
+        return generate_seating_arrangement()
 
     else:
-        return render_template('set_student_details.html', Students = lst, student_range = range(len(lst)), range = range(5), Subject = Subject, error = False)
+        return render_template('set_student_details.html', Students = lst, student_range = range(len(lst)), range = range(5), Subject = Subject, error = False, ClassName = 's')
 
 def sort_by_grades(student_lst):
     #best scenario: Student A can help Student B and vice versa
