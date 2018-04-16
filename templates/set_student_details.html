@@ -64,13 +64,6 @@
 <h2 style="height: 17px">Seating Arrangement Set-Up</h2>
 <div class = "overflow">
 
-{% if error != False: %}
-<p style="color:#BF3F36; font-family: 'Roboto'; font-size: 19px">
-    <b>{{error}}</b>
-</p>
-{% endif %}
-
-
 <form action = '{{ url_for('set_student_details')}}' method = "POST">
     <p class = "words" style="height: 10px">No. of Rows:</p>
     <input class="transbox" type = "text" name = 'RowNo'>
@@ -115,8 +108,8 @@
     <input type = 'checkbox' name = 'SeatByGrades' value = 'Yes'>
     <p class = "notes" style="height: 10px; margin-top: 10px">Pupils who are weak in certain subjects will seat next to those who are strong in that subject.</p>
     <p class = "notes">This may not be 100% fulfilled as student's request to seat in front is prioritised.</p>
-    <input type = "hidden" name = 'ClassName' value = {{ ClassName }}>
-    <input class="transbox" style="height: 25px" type = 'submit' value = 'Next'>
+    <p></p>
+    <button class="transbox" style="height:25px;" type= "submit" formaction="generate_seating_arrangement">Next</button>
 </form>
 
 <p class = "notes">Note: By going back, all information entered will be gone.</p>
