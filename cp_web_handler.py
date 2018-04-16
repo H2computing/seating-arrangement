@@ -790,7 +790,7 @@ def show_seatarr_by_name(seatarrname):
     UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = seatarr
     seatarr_oop = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo)
     ClassSize = len(SeatArrSeq.split(","))
-    comments = execute_sql("SELECT * FROM Comment WHERE SeatArrName = '{}'".format(seatarrname))  # SQL Read
+    comments = execute_sql("SELECT * FROM Comment WHERE SeatArrName = '{}'".format(seatarrname))  # SQL ReadF
     # print(comments)
     comments_oop = list(map(lambda t: Comment(t[0], t[1], t[2], t[3], t[4]), comments))
     # print(comments_oop)
@@ -830,6 +830,7 @@ def show_seatarr_by_name(seatarrname):
                     count += 1
         result.append(temp)
         temp = []
+
     return render_template("show_seatarr_by_name.html", seatarrname=seatarrname, comments=comments_oop, SeatingArrangement_lst = result, RowNoRange = range(RowNo), ColumnNoRange = range(ColumnNo), ColumnNo = ColumnNo, ClassSize = ClassSize)
 
 
@@ -871,32 +872,28 @@ def create_comment(seatarrname):
 
 # edit comment
 #TODO edit such that a window pops up and asks for new comment text (ref edit seatarr)
-@app.route("/edit_comment/<string:comment_id>", methods=['GET', 'POST'])
-def edit_comment(comment_id):
-    comment = execute_sql("SELECT * FROM Comment WHERE CommentID = '{}'".format(comment_id))[0]
-    # print(comment)
+@app.route("/edit_comment", methods=['POST'])
+def edit_comment():
+    error = False
+    if request.form['CommentText'].isspace() or request.form['CommentText'] == "":
+        error = "Invalid Comment Text, Please write something for Comment Text..."
+
+    comment_id = request.form['CommentID']
+    comment = execute_sql('SELECT * FROM Comment WHERE CommentID = "{}"'.format(comment_id))[0]
     SeatArrName, CommentID, CommentText, CommentDatetime, UserName = comment
     edit_comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)
 
-    if request.method == 'POST':
-        error = False
-        if request.form['CommentText'].isspace() or request.form['CommentText'] == "":
-            error = "Invalid Comment Text, Please write something for Comment Text..."
-
-        if error != False:
-            return render_template("edit_comment.html", edit_comment=edit_comment, error=error)
-
+    if error == False:
         # Update Comment Object
         edit_comment.set_CommentText(request.form['CommentText'])
 
         # Update the database
         execute_sql(edit_comment.update_record())
 
-        # Return to mainpage
-        return redirect(url_for("show_seatarr_by_name", seatarrname=SeatArrName))
-    else:
-        # GET
-        return render_template("edit_comment.html", edit_comment=edit_comment)
+    # Return to mainpage
+    print(error)
+    return redirect(url_for("show_seatarr_by_name", error = error, seatarrname=SeatArrName))
+
 
 
 # delete comment
@@ -909,20 +906,16 @@ def delete_comment():
     SeatArrName, CommentID, CommentText, CommentDatetime, UserName = comment
     delete_comment = Comment(SeatArrName, CommentID, CommentText, CommentDatetime, UserName)
 
-    if request.method == 'POST':
-        # Update DB
-        execute_sql(delete_comment.delete_record())
+    # Update DB
+    execute_sql(delete_comment.delete_record())
 
-        UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = execute_sql("SELECT * FROM SavedSeatArr WHERE SeatArrName = '{}'".format(SeatArrName))[0]
-        edit_ssr = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
-        edit_ssr.delete_CommentIDs(comment_id)
-        execute_sql(edit_ssr.update_record())
+    UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs = execute_sql("SELECT * FROM SavedSeatArr WHERE SeatArrName = '{}'".format(SeatArrName))[0]
+    edit_ssr = SavedSeatArr(UserName, SeatArrName, SeatArrSeq, RowNo, ColumnNo, CommentIDs)
+    edit_ssr.delete_CommentIDs(comment_id)
+    execute_sql(edit_ssr.update_record())
 
-        # Return to mainpage
-        return redirect(url_for("show_seatarr_by_name", seatarrname = SeatArrName))
-
-    else:
-        return render_template("delete_comment.html", delete_comment=delete_comment)
+    # Return to mainpage
+    return redirect(url_for("show_seatarr_by_name", seatarrname = SeatArrName))
 
 
 @app.route("/show_saved_seatingarr/search_filter")
