@@ -65,20 +65,17 @@
 {% endif %}
 
 <form action = "{{url_for('create_comment', seatarrname = seatarrname)}}" method = "POST">
-    <p class="words">Seat Arrangement Name:</p>
-    <input type = "text" size = "30" name = "SeatArrName" value = "{{seatarrname}}" readonly>
+    <input type = "hidden" size = "30" name = "SeatArrName" value = "{{seatarrname}}">
 
     <p class="words">UserName:</p>
-    <input type = "type" size = "30" name = "UserName" placeholder = "Enter your username...">
+    <textarea cols = "30" rows = '1' name = "UserName" placeholder = "Enter your username..."></textarea>
 
-    <p class="words">Comment ID:</p>
-    <input type = "integer" size = "30" name = "CommentID" value = "{{new_CommentID}}" readonly>
+    <input type = "hidden" size = "30" name = "CommentID" value = "{{new_CommentID}}">
 
     <p class="words">Comment Text:</p>
-    <input type = "text" size = "30" name = "CommentText" placeholder = "Write a comment..." >
+    <textarea cols = "50" rows = '10' name = "CommentText" placeholder = "Write a comment..." ></textarea>
 
-    <p class="words">Comment Date:</p>
-    <input type = "text" size = "30" name = "CommentDatetime" value = "{{today}}" readonly>
+    <input type = "hidden" size = "30" name = "CommentDatetime" value = "{{today}}">
 
     <p></p>
     <input type = 'submit' value = 'Create'>
