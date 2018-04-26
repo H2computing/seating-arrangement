@@ -1,4 +1,4 @@
-from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr, Comment
+from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr, Comment, UserInfo
 import sqlite3
 import sys
 
@@ -39,6 +39,7 @@ def create_table():
     execute_sql(CurrentUser.create_table())
     execute_sql(SavedSeatArr.create_table())
     execute_sql(Comment.create_table())
+    execute_sql(UserInfo.create_table())
 
 #create_table()
 

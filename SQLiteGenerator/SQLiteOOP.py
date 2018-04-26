@@ -748,3 +748,56 @@ class Comment(object):
         result += "DELETE FROM Comment WHERE\n"
         result += "SeatArrName = '{self._SeatArrName}' and CommentID = '{self._CommentID}'\n".format(self=self)
         return result
+
+
+class UserInfo(object):
+    def __init__(self,username,password):
+        self._username = username
+        self._password = password
+
+    def set_username(self,new_username):
+        self._username = new_username
+    def set_password(self,new_password):
+        self._password = new_password
+
+    def get_username(self):
+        return self._username
+    def get_password(self):
+        return self._password
+
+    def __str__(self):
+        result = ""
+        return result
+
+
+    @staticmethod
+    def create_table():
+        result = ""
+        result += "CREATE TABLE UserInfo(\n"
+        result += "username TEXT ,\n"
+        result += "password TEXT NOT NULL,\n"
+        result += "PRIMARY KEY(username)\n"
+        result += ")\n"
+        return result
+
+    def create_new_account(self):
+        result = ""
+        result += "INSERT INTO UserInfo\n"
+        result += "(username,password)\n"
+        result += "VALUES\n"
+        result += "('{self._username}', '{self._password}')\n".format(self=self)
+        return result
+
+    def update_account():
+        result = ""
+        result += "UPDATE UserInfo SET\n"
+        result += "username = '{self._username}', password = '{self._password}'\n".format(self=self)
+        result += "WHERE\n"
+        result += "VenueName = '{self._VenueName}'\n".format(self=self)
+        return result
+
+    def delete_account():
+        result = ""
+        result += "DELETE FROM UserInfo WHERE\n"
+        result += "username = '{self._username}'\n".format(self=self)
+        return result
