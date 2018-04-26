@@ -213,7 +213,7 @@
         <form id = 'editForm' action = "{{url_for('edit_comment')}}" method = "POST">
             <input  type = 'hidden' name = 'CommentID'>
 
-            <p>Comment Text:</p>
+            <p class="words">Comment Text:</p>
             <textarea rows = '10' cols = "70" style="font-size: 15px" name = "CommentText" wrap = "hard"></textarea>
             <script>
                 $("textarea").keypress(function(event) {

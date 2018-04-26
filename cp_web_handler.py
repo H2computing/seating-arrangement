@@ -1,19 +1,71 @@
 from flask import Flask, render_template, url_for, request, redirect
-from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr, Comment
+from SQLiteGenerator.SQLiteOOP import Class, Student, StudentRecords, Subject, SeatingArrangement, User, CurrentUser, SavedSeatArr, Comment, UserInfo
 from database_handler import execute_sql
 import random
 from datetime import date
 
 app = Flask(__name__)
 
+'''
 #google signin
 @app.route("/w")
 def google_sign_in():
     return render_template("google_sign_in.html")
+'''
+
+#Default Home Page: display user login page
+@app.route("/", methods=['GET','POST'])
+def display_login():
+    credentials = execute_sql("SELECT * FROM UserInfo")  # Read SQL
+    #print(credentials)
+    if request.method == 'POST':
+        #if request.form['username'].strip() != '' and request.form['password'].strip() != '':
+        for i in credentials:
+            if request.form['username'] == i[0] and request.form['password'] == i[1]:
+                #nonlocal current_user
+                #current_user = request.form['username']
+                #print(current_user)
+                return redirect(url_for('display_all_student_records'))
+
+        return render_template("login_page.html",credentials=credentials, error = "Invalid Username or Password, please try again.")
+
+    return render_template("login_page.html",credentials=credentials, error = False)
+
+@app.route("/create_account", methods=['GET','POST'])
+def create_account():
+    if request.method == 'POST':
+        accounts = execute_sql("SELECT * FROM UserInfo") #Read SQL
+        account_names = []
+        for each_username in accounts:
+            account_names.append(each_username[0])
+        if request.form.get('username') in account_names:
+            return render_template("create_account.html", error = "This username is taken!")
+        elif request.form.get('username').strip() == "" or request.form.get('password').strip() == "":
+            return render_template("create_account.html", error = "Username/Password should not be empty spaces.")
+        else:
+            new_account = UserInfo(None,None)
+            new_account.set_username(request.form.get('username'))
+            new_account.set_password(request.form.get('password'))
+            execute_sql(new_account.create_new_account())
+            #new_account_info = ClassInfo(request.form.get('username'),None,None)
+            #execute_sql(new_account_info.create_new_info())
+        return redirect(url_for("display_login"))
+    else:
+        return render_template("create_account.html", error = False)
+
+@app.route("/Welcome!")
+def login_success():
+    '''
+    nonlocal current_user
+    user = execute_sql("SELECT * FROM UserInfo WHERE username = current_user")
+    username, password = user
+    user_info = UserInfo(username,password)
+    #print(user) '''
+    return render_template("login_success.html")
 
 
 #display page
-@app.route("/")
+@app.route("/Home_Page")
 def display_all_student_records():
     classes = execute_sql("SELECT * FROM Class")
     students = execute_sql("SELECT * FROM Student")

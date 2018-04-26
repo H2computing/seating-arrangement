@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel="stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Lato' rel="stylesheet">
     <meta charset="UTF-8">
     <title>Edit Comment</title>
     <style>
@@ -23,6 +25,11 @@
             z-index: -1;
             opacity: 0.5;
         }
+        .words{
+            font-family: 'Lato';
+            font-size: 18px;
+            weight: bold;
+        }
      </style>
 </head>
 <body>
@@ -42,7 +49,7 @@
     <p>Comment ID:</p>
     <input type = "text" size = "30" name = "CommentID" value = "{{edit_comment.get_CommentID()}}" readonly>
 
-    <p>Comment Text:</p>
+    <p class = "words">Comment Text:</p>
     <input type = "text" size = "30" name = "CommentText" value = "{{edit_comment.get_CommentText()}}">
 
     <p>Comment Date:</p>
