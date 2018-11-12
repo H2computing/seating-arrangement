@@ -11,10 +11,10 @@ app = Flask(__name__)
 @app.route("/w")
 def google_sign_in():
     return render_template("google_sign_in.html")
-'''
+
 
 #Default Home Page: display user login page
-@app.route("/", methods=['GET','POST'])
+@app.route("/")
 def display_login():
     credentials = execute_sql("SELECT * FROM UserInfo")  # Read SQL
     #print(credentials)
@@ -55,17 +55,17 @@ def create_account():
 
 @app.route("/Welcome!")
 def login_success():
-    '''
     nonlocal current_user
     user = execute_sql("SELECT * FROM UserInfo WHERE username = current_user")
     username, password = user
     user_info = UserInfo(username,password)
-    #print(user) '''
+    #print(user)
     return render_template("login_success.html")
+    '''
 
 
 #display page
-@app.route("/Home_Page")
+@app.route("/")
 def display_all_student_records():
     classes = execute_sql("SELECT * FROM Class")
     students = execute_sql("SELECT * FROM Student")
